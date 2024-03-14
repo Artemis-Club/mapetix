@@ -1,20 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { Text, View } from "react-native";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <View className="flex-1 items-center justify-center bg-neutral-700">
+      <Text className="text-white">Hello world</Text>
       <StatusBar style="auto" />
+      <Icon name="map-check-outline" size={24} color="white" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
