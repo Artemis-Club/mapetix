@@ -1,14 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import getUser from "@/api/graphql/queries/user/get.graphql";
+import getUser from "../graphql/queries/user/getUser.graphql";
 
-const graphqlApi = createApi({
-  reducerPath: "graphqlApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/graphql" }),
+const userApi = createApi({
+  reducerPath: "userApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "/graphql", method: "POST" }),
   endpoints: (builder) => ({
-    getMyData: builder.query({
+    getUser: builder.query({
       query: (id) => ({
         url: "",
-        method: "POST",
         body: {
           query: getUser,
           variables: { id },
@@ -19,5 +18,5 @@ const graphqlApi = createApi({
   }),
 });
 
-export const { useGetMyDataQuery } = graphqlApi;
-export default graphqlApi;
+export const { useGetUserQuery } = userApi;
+export default userApi;
