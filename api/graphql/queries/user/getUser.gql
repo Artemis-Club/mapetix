@@ -1,0 +1,7 @@
+query GetMyData($id: ID!) {
+  myData(id: $id) {
+    id
+    name
+    # other fields
+  }
+}
