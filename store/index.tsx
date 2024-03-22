@@ -11,7 +11,9 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
 import userReducer from "./slices/user";
-import userApi from "@/api/slices/user";
+
+import userApi from "@/api/user";
+import React from "react";
 
 const persistConfig = {
   key: "root",
@@ -38,7 +40,7 @@ setupListeners(store.dispatch);
 
 const persistorStore = persistStore(store);
 
-export const StoreProvider = ({ children }) => (
+export const StoreProvider = ({ children }: { children: React.ReactNode }) => (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistorStore}>
       {children}
