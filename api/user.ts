@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import getUser from "../graphql/queries/user/getUser.graphql";
+import getUser from "./graphql/queries/user/getUser.graphql";
 
 const userApi = createApi({
   reducerPath: "userApi",
