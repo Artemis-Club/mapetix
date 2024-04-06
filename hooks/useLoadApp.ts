@@ -1,14 +1,20 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import {
+  useFonts,
+  KumbhSans_100Thin,
+  KumbhSans_400Regular,
+  KumbhSans_800ExtraBold,
+} from "@expo-google-fonts/kumbh-sans";
+
 import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
 export const useLoadApp = () => {
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    ...FontAwesome.font,
+    KumbhSans_100Thin,
+    KumbhSans_400Regular,
+    KumbhSans_800ExtraBold,
   });
 
   useEffect(() => {
