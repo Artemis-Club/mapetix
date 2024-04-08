@@ -14,6 +14,7 @@ import userReducer from "./slices/user";
 
 import userApi from "@/api/user";
 import React from "react";
+import authApi from "@/api/auth";
 
 const persistConfig = {
   key: "root",
@@ -23,6 +24,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: persistReducer(persistConfig, userReducer),
   [userApi.reducerPath]: userApi.reducer,
+  [authApi.reducerPath]: authApi.reducer,
 });
 
 export const store = configureStore({
@@ -33,7 +35,9 @@ export const store = configureStore({
         // Ignore these action types
         ignoredActions: ["persist/PERSIST"],
       },
-    }).concat(userApi.middleware),
+    })
+      .concat(userApi.middleware)
+      .concat(authApi.middleware),
 });
 
 setupListeners(store.dispatch);
