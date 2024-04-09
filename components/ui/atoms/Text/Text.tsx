@@ -9,11 +9,21 @@ interface TextProps {
   className?: string;
 }
 
-const Text: React.FC<TextProps> = ({ children, fit, bold, style }) => {
-    const textStyle = fit ? "font-thin" : bold ? "font-bold" : "font-regular";
-    console.log(style);
+const Text: React.FC<TextProps> = ({
+  children,
+  fit,
+  bold,
+  style,
+  className,
+}) => {
+  const textStyle = fit ? "font-thin" : bold ? "font-bold" : "font-regular";
+  console.log(style);
 
-  return <RNText className={textStyle} style={style}>{children}</RNText>;
+  return (
+    <RNText className={textStyle} style={style}>
+      {children}
+    </RNText>
+  );
 };
 
 export default Text;
