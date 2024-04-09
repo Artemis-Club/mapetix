@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
+import clsx from "clsx";
 import Text from "../Text/Text";
 interface ButtonProps {
   onPress?: () => void;
@@ -17,9 +18,9 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const buttonStyles =
     stylish === "fill" ? "bg-purple-500" : "border border-purple-600";
-  const textStyles = stylish === "fill" ? "text-orange-600" : "text-orange-600";
+  const textStyles = stylish === "fill" ? "text-white" : "text-orange-600";
   return (
-    <TouchableOpacity className={buttonStyles} onPress={onPress} style={style}>
+    <TouchableOpacity className={clsx(buttonStyles, "self-center rounded-full p-2 px-4")} onPress={onPress} style={style}>
       <Text className={textStyles}>{children}</Text>
     </TouchableOpacity>
   );

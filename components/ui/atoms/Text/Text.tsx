@@ -17,8 +17,6 @@ const Text: React.FC<TextProps> = ({
   className,
 }) => {
   const textStyle = fit ? "font-thin" : bold ? "font-bold" : "font-regular";
-  console.log(style);
-
   return (
     <RNText className={textStyle} style={style}>
       {children}
