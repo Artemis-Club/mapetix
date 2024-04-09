@@ -34,7 +34,8 @@
     "react-native-screens": "~3.29.0",
     "react-native-web": "~0.19.6",
     "react-redux": "^9.1.0",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "tailwind-rn": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
