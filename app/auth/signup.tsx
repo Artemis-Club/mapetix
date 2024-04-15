@@ -1,20 +1,23 @@
 import { Text } from "react-native";
 import { Button, Input } from "@/components";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSignUpMutation } from "@/api/auth";
+import { default as useAuth } from "@/hooks/useAuth";
 import useForm from "@/hooks/useForm";
+import { AuthPayload } from "@/types";
 
 export default function Signup() {
-  const [signup, result] = useSignUpMutation();
+  const { onSignup } = useAuth();
 
   const { values, onChange } = useForm({
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const onSubmit = async () => {
-    const res = await signup(values);
-    console.log(res, result);
+    const { password, confirmPassword } = values;
+    if (password !== confirmPassword) return;
+    await onSignup(values as unknown as AuthPayload);
   };
 
   return (
@@ -25,12 +28,21 @@ export default function Signup() {
         onChange={onChange("email")}
         keyboardType="email-address"
         textContentType="emailAddress"
+        autoCapitalize="none"
       />
       <Input
         label="Contraseña"
         onChange={onChange("password")}
         secureTextEntry={true}
         textContentType="password"
+        autoCapitalize="none"
+      />
+      <Input
+        label="Confirmar constraseña"
+        onChange={onChange("confirmPassword")}
+        secureTextEntry={true}
+        textContentType="password"
+        autoCapitalize="none"
       />
       <Button onPress={onSubmit}>Registrarse</Button>
     </SafeAreaView>
