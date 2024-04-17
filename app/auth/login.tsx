@@ -6,7 +6,7 @@ import useForm from "@/hooks/useForm";
 import { AuthPayload } from "@/types";
 
 export default function Login() {
-  const { onLogin } = useAuth();
+  const { login } = useAuth();
 
   const { values, onChange } = useForm({
     email: "",
@@ -14,7 +14,7 @@ export default function Login() {
   });
 
   const onSubmit = async () => {
-    await onLogin(values as unknown as AuthPayload);
+    await login(values as unknown as AuthPayload);
   };
 
   return (
@@ -34,7 +34,7 @@ export default function Login() {
         textContentType="password"
         autoCapitalize="none"
       />
-      <Button onPress={onSubmit}>Registrarse</Button>
+      <Button onPress={onSubmit}>Acceder</Button>
     </SafeAreaView>
   );
 }

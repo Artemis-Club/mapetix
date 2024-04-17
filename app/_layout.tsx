@@ -2,8 +2,6 @@ import { Stack } from "expo-router";
 import { StoreProvider } from "@/store";
 import { useLoadApp } from "@/hooks/useLoadApp";
 
-export { ErrorBoundary } from "expo-router";
-
 export default function RootLayout() {
   const { loaded } = useLoadApp();
 

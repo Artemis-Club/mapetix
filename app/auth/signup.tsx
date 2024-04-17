@@ -6,7 +6,7 @@ import useForm from "@/hooks/useForm";
 import { AuthPayload } from "@/types";
 
 export default function Signup() {
-  const { onSignup } = useAuth();
+  const { signup } = useAuth();
 
   const { values, onChange } = useForm({
     email: "",
@@ -17,7 +17,7 @@ export default function Signup() {
   const onSubmit = async () => {
     const { password, confirmPassword } = values;
     if (password !== confirmPassword) return;
-    await onSignup(values as unknown as AuthPayload);
+    await signup(values as unknown as AuthPayload);
   };
 
   return (

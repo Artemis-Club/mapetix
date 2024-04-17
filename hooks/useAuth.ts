@@ -4,27 +4,33 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
 const useAuth = () => {
-  const [signup] = useSignUpMutation();
-  const [login] = useLoginMutation();
+  const [signupRequest] = useSignUpMutation();
+  const [loginRequest] = useLoginMutation();
+
   const router = useRouter();
 
-  const onLogin = async (payload: AuthPayload) => {
-    const response = await login(payload);
+  const login = async (payload: AuthPayload) => {
+    const response = await loginRequest(payload);
     if (response.error) return;
 
     await AsyncStorage.setItem("token", response.data?.access_token);
     router.push("/main/");
   };
 
-  const onSignup = async (payload: AuthPayload) => {
-    const response = await signup(payload);
+  const signup = async (payload: AuthPayload) => {
+    const response = await signupRequest(payload);
     if (response.error) return;
 
     await AsyncStorage.setItem("token", response.data?.access_token);
     router.push("/main/");
   };
 
-  return { onLogin, onSignup };
+  const logout = async () => {
+    await AsyncStorage.removeItem("token");
+    router.push("/auth/");
+  };
+
+  return { login, signup, logout };
 };
 
 export default useAuth;
