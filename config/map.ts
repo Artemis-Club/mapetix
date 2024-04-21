@@ -1,3 +1,5 @@
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+
 export const mapSettings = {
   initialRegion: {
     latitude: 39.46975,
@@ -5,6 +7,8 @@ export const mapSettings = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   },
+  provider: PROVIDER_GOOGLE,
+  showsCompass: false,
   customMapStyle: [
     {
       elementType: 'geometry',

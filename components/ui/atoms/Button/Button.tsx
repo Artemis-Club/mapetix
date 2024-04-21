@@ -5,7 +5,7 @@ import Text from '../Text/Text';
 interface ButtonProps {
   onPress?: () => void;
   children: React.ReactNode;
-  stylish?: 'fill' | 'outline';
+  stylish?: 'fill' | 'outline' | 'nav';
   style?: any;
   className?: string;
 }
