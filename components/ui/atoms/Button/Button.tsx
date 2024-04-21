@@ -5,9 +5,9 @@ interface ButtonProps {
   children: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ children }) => {
+const Button: React.FC<ButtonProps> = ({ children, onPress }) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <Text>{children}</Text>
     </TouchableOpacity>
   );

@@ -2,10 +2,6 @@ import { Stack } from "expo-router";
 import { StoreProvider } from "@/store";
 import { useLoadApp } from "@/hooks/useLoadApp";
 
-export { ErrorBoundary } from "expo-router";
-
-export const unstable_settings = { initialRouteName: "main" };
-
 export default function RootLayout() {
   const { loaded } = useLoadApp();
 
@@ -13,8 +9,18 @@ export default function RootLayout() {
 
   return (
     <StoreProvider>
-      <Stack>
+      <Stack
+        screenOptions={{
+          title: "",
+          headerBackTitleVisible: false,
+          headerTintColor: "#FFFFFF",
+          headerTransparent: true,
+        }}
+      >
         <Stack.Screen name="main" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/index" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/login" options={{ headerShown: true }} />
+        <Stack.Screen name="auth/signup" options={{ headerShown: true }} />
       </Stack>
     </StoreProvider>
   );
