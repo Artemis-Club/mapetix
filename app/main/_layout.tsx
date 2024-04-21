@@ -1,31 +1,29 @@
-import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
-
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import React from 'react';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Drawer } from 'expo-router/drawer';
+import { Button } from '@/components';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from 'expo-router';
+import { DrawerActions } from '@react-navigation/native';
+import { View } from 'react-native';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 
 export default function TabLayout() {
+  const padding = useSafeAreaInsets();
+  const navigation = useNavigation();
   return (
-    <Tabs>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
+    <>
+      <Drawer>
+        <Drawer.Screen
+          name="map"
+          options={{
+            headerShown: true,
+            headerTransparent: true,
+            headerTitle: '',
+            headerTintColor: 'orange',
+          }}
+        />
+      </Drawer>
+    </>
   );
 }

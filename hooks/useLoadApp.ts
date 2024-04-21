@@ -1,9 +1,14 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
-import { useEffect, useState } from "react";
-import { useRootNavigationState, useRouter } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  useFonts,
+  KumbhSans_100Thin,
+  KumbhSans_400Regular,
+  KumbhSans_800ExtraBold,
+} from '@expo-google-fonts/kumbh-sans';
+
+import { useEffect, useState } from 'react';
+import { useRootNavigationState, useRouter } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -13,13 +18,14 @@ export const useLoadApp = () => {
   const [tokenChecked, setTokenChecked] = useState(false);
 
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    ...FontAwesome.font,
+    KumbhSans_100Thin,
+    KumbhSans_400Regular,
+    KumbhSans_800ExtraBold,
   });
 
   const checkToken = async () => {
-    const token = await AsyncStorage.getItem("token");
-    router.push(token ? "/main/" : "/auth/");
+    const token = await AsyncStorage.getItem('token');
+    router.push(token ? '/main/' : '/auth/');
     setTokenChecked(true);
   };
 
