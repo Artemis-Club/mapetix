@@ -13,7 +13,7 @@ const useAuth = () => {
 
   const login = async (payload: AuthPayload) => {
     const response = await loginRequest(payload);
-    if (response.error) return setError(response.error);
+    if (response.error) return setError(response.error.data.error_description);
 
     await AsyncStorage.setItem('token', response.data?.access_token);
     router.push('/main/');
@@ -22,7 +22,7 @@ const useAuth = () => {
   const signup = async (payload: AuthPayload) => {
     setError(null);
     const response = await signupRequest(payload);
-    if (response.error) return setError(response.error);
+    if (response.error) return setError(response.error.data.error_description);
 
     await AsyncStorage.setItem('token', response.data?.access_token);
     router.push('/main/');
