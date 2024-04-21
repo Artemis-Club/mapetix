@@ -1,16 +1,16 @@
-import { Text, View } from "react-native";
-import { Button, Input } from "@/components";
-import { SafeAreaView } from "react-native-safe-area-context";
-import useAuth from "@/hooks/useAuth";
-import useForm from "@/hooks/useForm";
-import { AuthPayload } from "@/types";
+import { Text, View } from 'react-native';
+import { Button, Input } from '@/components';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import useAuth from '@/hooks/useAuth';
+import useForm from '@/hooks/useForm';
+import { AuthPayload } from '@/types';
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, error } = useAuth();
 
   const { values, onChange } = useForm({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const onSubmit = async () => {
@@ -22,19 +22,20 @@ export default function Login() {
       <Text className="text-2xl text-white">Acceder</Text>
       <Input
         label="Correo"
-        onChange={onChange("email")}
+        onChange={onChange('email')}
         keyboardType="email-address"
         textContentType="emailAddress"
         autoCapitalize="none"
       />
       <Input
         label="Contraseña"
-        onChange={onChange("password")}
+        onChange={onChange('password')}
         secureTextEntry={true}
         textContentType="password"
         autoCapitalize="none"
       />
       <Button onPress={onSubmit}>Acceder</Button>
+      {error && <Text className="text-red-500">{JSON.stringify(error)}</Text>}
     </SafeAreaView>
   );
 }
