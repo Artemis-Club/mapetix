@@ -17,12 +17,17 @@ export default function RootLayout() {
             headerBackTitleVisible: false,
             headerTintColor: '#FFFFFF',
             headerTransparent: true,
+            headerStyle: { backgroundColor: '#404040' },
           }}
         >
           <Stack.Screen name="main" options={{ headerShown: false }} />
           <Stack.Screen name="auth/index" options={{ headerShown: false }} />
           <Stack.Screen name="auth/login" options={{ headerShown: true }} />
           <Stack.Screen name="auth/signup" options={{ headerShown: true }} />
+          <Stack.Screen
+            name="plan/[planId]"
+            options={{ headerShown: true, headerTransparent: false }}
+          />
         </Stack>
       </GestureHandlerRootView>
     </StoreProvider>
