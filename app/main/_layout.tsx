@@ -8,17 +8,13 @@ export default function DrawerLayout() {
         headerTintColor: 'white',
         headerStyle: { backgroundColor: '#404040' },
         headerShadowVisible: false,
+        drawerActiveBackgroundColor: '#f59e0b',
+        drawerActiveTintColor: 'white',
+        drawerStyle: { backgroundColor: '#404040' },
+        drawerInactiveTintColor: '#aaa',
       }}
     >
-      <Drawer.Screen
-        name="map"
-        options={{
-          headerShown: true,
-          headerTransparent: true,
-          headerTitle: '',
-          headerTintColor: 'orange',
-        }}
-      />
+      <Drawer.Screen name="map" options={{ title: 'Mapa' }} />
       <Drawer.Screen name="my-plans" options={{ title: 'Mis planes' }} />
     </Drawer>
   );
