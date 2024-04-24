@@ -8,10 +8,10 @@ export default function PlanDetails() {
   const { planId } = useLocalSearchParams();
   const { data: plan = [], isLoading } = useGetPlanDetailsQuery(planId);
 
-  const events = plan[0]?.plan_event?.map(({ event }) => ({
+  const events = plan.events?.map((event) => ({
+    ...event,
     time: event.start_hour.slice(0, 5),
     title: event.event_name,
-    description: event.description,
   }));
 
   return (
