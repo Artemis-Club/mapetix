@@ -1,23 +1,25 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
-import { setupListeners } from "@reduxjs/toolkit/query";
+import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import { setupListeners } from '@reduxjs/toolkit/query';
 // import thunk from 'redux-thunk';
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { persistReducer, persistStore } from "redux-persist";
+import { persistReducer, persistStore } from 'redux-persist';
 
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import userReducer from "./slices/user";
+import userReducer from './slices/user';
 
-import userApi from "@/api/user";
-import React from "react";
-import authApi from "@/api/auth";
+import userApi from '@/api/user';
+import React from 'react';
+
+import authApi from '@/api/auth';
+import planApi from '@/api/plan';
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage: AsyncStorage,
 };
 
@@ -25,6 +27,7 @@ const rootReducer = combineReducers({
   user: persistReducer(persistConfig, userReducer),
   [userApi.reducerPath]: userApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
+  [planApi.reducerPath]: planApi.reducer,
 });
 
 export const store = configureStore({
@@ -33,11 +36,12 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ["persist/PERSIST"],
+        ignoredActions: ['persist/PERSIST'],
       },
     })
       .concat(userApi.middleware)
-      .concat(authApi.middleware),
+      .concat(authApi.middleware)
+      .concat(planApi.middleware),
 });
 
 setupListeners(store.dispatch);

@@ -4,12 +4,15 @@ import PlanCard from '@/components/ui/molecules/PlanCard/PlanCard';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
 import useAuth from '@/hooks/useAuth';
+import { useGetUserQuery } from '@/api/auth';
 
 export default function TabOneScreen() {
   const { logout } = useAuth();
+  const { data: userData } = useGetUserQuery();
+
   return (
     <View className="flex-1 bg-neutral-800 gap-y-2">
-      <Text className="text-2xl text-white">Tab One</Text>
+      <Text className="text-xl text-white">Bienvenido, {userData?.email}</Text>
       <Button>Hey! Button 1</Button>
       <Link className="text-white underline" href="/auth/">
         Acceder

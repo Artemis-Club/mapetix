@@ -25,6 +25,7 @@ export const useLoadApp = () => {
 
   const checkToken = async () => {
     const token = await AsyncStorage.getItem('token');
+    console.log('token', token);
     router.push(token ? '/main/' : '/auth/');
     setTokenChecked(true);
   };
