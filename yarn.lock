@@ -7281,6 +7281,11 @@ react-native-maps@1.10.0:
   dependencies:
     "@types/geojson" "^7946.0.13"
 
+react-native-pager-view@^6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.3.1.tgz#16ef202248311262e3fffd0191d7043a88e8d5fc"
+  integrity sha512-U7Ep6ukTA5pKMQskSxHpDI9RoESzBHDcBfVFwnK5SRCy9632Dq4a7Jp2m8vA9mK5k6Vi7yaqqKLFVoHnUdC8zA==
+
 react-native-reanimated@~3.6.2:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.6.3.tgz#859cf2320e37c80e3a21e19db24f82c34d6d3ded"
