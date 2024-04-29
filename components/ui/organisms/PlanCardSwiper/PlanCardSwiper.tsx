@@ -1,47 +1,34 @@
-/*import React from 'react';
-import PlanCard from '../../molecules/PlanCard/PlanCard';
-import { View } from 'react-native';
-import Text from '../../atoms/Text/Text';
-import Image from '../../atoms/Image/Image';
-import Carousel from 'react-native-snap-carousel';
+import React from 'react';
+import { View, ScrollView, Dimensions } from 'react-native';
+import { PlanCard } from '../../molecules';
+import { PlanCardProps } from '../../molecules/PlanCard/PlanCard';
+import { InnerScreen } from 'react-native-screens';
 
-const MyCarousel = ({ plans }: { plans: PlanCardProps[] }) => {
-  const renderItem = ({ item }: { item: PlanCardProps }) => (
-    <View
-      style={{ backgroundColor: 'lightgray', padding: 20, borderRadius: 10 }}
-    >
-      <Text>{item.title}</Text>
-      <Text>
-        {item.hourStart} - {item.hourEnd}
-      </Text>
-      <Text>{item.tripOverview1}</Text>
-      <Text>{item.tripOverview2}</Text>
-      <Text>{item.price}€</Text>
-      <Image
-        source={{ uri: item.imageUrl1 }}
-        style={{ width: 100, height: 100 }}
-      />
-      <Image
-        source={{ uri: item.imageUrl2 }}
-        style={{ width: 100, height: 100 }}
-      />
-      <Image
-        source={{ uri: item.imageUrl3 }}
-        style={{ width: 100, height: 100 }}
-      />
-      <Text>{item.locationName}</Text>
-      <Text>{item.description}</Text>
-    </View>
-  );
+interface PlanCardSwiperProps {
+  planCards: PlanCardProps[];
+}
+const screenWidth = Dimensions.get('window').width;
+const itemWidth = screenWidth * 0.9;
+const margin = screenWidth * 0.05;
+const PlanCardSwiperItem: React.FC<PlanCardProps> = (props) => {
+  return <PlanCard {...props} />;
+};
 
+const PlanCardSwiper: React.FC<PlanCardSwiperProps> = ({ planCards }) => {
   return (
-    <Carousel
-      data={plans}
-      renderItem={renderItem}
-      sliderWidth={300}
-      itemWidth={300}
-    />
+    <View>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        snapToInterval={itemWidth + margin * 2}
+        className="w-fit"
+      >
+        {planCards.map((planCard, index) => (
+          <PlanCardSwiperItem key={index} {...planCard} />
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
-export default PlanCardSwiper;*/
+export default PlanCardSwiper;

@@ -4,7 +4,7 @@ import Button from '../../atoms/Button/Button';
 import Text from '../../atoms/Text/Text';
 import { View } from 'react-native';
 
-interface PlanCardProps {
+export interface PlanCardProps {
   title: string;
   hourStart: string;
   hourEnd: string;
@@ -32,7 +32,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
   description,
 }) => {
   return (
-    <View className={'bg-white rounded-lg p-4 mb-4 shadow-md'}>
+    <View className={'bg-white rounded-lg p-4 mb-4 shadow-md w-screen'}>
       <View className="flex-row items-center self-start mr-2">
         <View className="flex-col basis-1/2 grow-0">
           <Text fit bold className="text-xl mb-2">
