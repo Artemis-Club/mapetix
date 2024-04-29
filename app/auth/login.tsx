@@ -1,5 +1,5 @@
-import { Text, View } from 'react-native';
-import { Button, Input } from '@/components';
+import { View } from 'react-native';
+import { Button, Input, Text } from '@/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useAuth from '@/hooks/useAuth';
 import useForm from '@/hooks/useForm';
@@ -19,7 +19,7 @@ export default function Login() {
 
   return (
     <SafeAreaView className="flex-1 bg-neutral-800 pt-12 px-4 gap-y-2">
-      <Text className="text-2xl text-white">Acceder</Text>
+      <Text className="text-2xl">Acceder</Text>
       <Input
         label="Correo"
         onChange={onChange('email')}

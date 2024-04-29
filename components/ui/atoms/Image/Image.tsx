@@ -1,5 +1,5 @@
-import React from "react";
-import { Image as RNImage } from "react-native";
+import React from 'react';
+import { Image as RNImage } from 'react-native';
 
 interface ImageProps {
   source: string; //por ahora como links
@@ -11,8 +11,9 @@ const Image: React.FC<ImageProps> = ({ source, style }) => {
   return (
     <RNImage
       source={{ uri: source }}
-      style={["max-w-full max-h-full", style]}
-      resizeMode="contain"
+      className="max-w-full max-h-full"
+      style={style}
+      resizeMode="cover"
     />
   );
 };

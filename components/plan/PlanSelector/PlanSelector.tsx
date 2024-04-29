@@ -31,7 +31,7 @@ const PlanSelector: React.FC<PlanSelectorProps> = ({
         )}
       >
         <View className="flex-col">
-          <Text className="text-white text-base">{description}</Text>
+          <Text className="text-base">{description}</Text>
           <Text className="text-neutral-500 text-xs">{start_date}</Text>
         </View>
         <View className="flex-col justify-center">
