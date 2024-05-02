@@ -1,5 +1,5 @@
 from algoritmobueno import recommend_events_for_user
-from filter_events import filter_events_by_criteria
+from pruebas.filter_events import filter_events_by_criteria
 from algoritmobueno import get_events, processresponseNoDF
 from algoritmobueno import df_events
 
