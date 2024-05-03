@@ -4,12 +4,15 @@ from supabase import create_client
 from dotenv import load_dotenv
 
 class SupabaseController:
-   
+
+    supabase_token = os.getenv('SUPABASE_JWT')
+    
     def __init__(self):
         load_dotenv()
 
         supabase_url = os.getenv('SUPABASE_URL')
         supabase_key = os.getenv('SUPABASE_KEY2')
+        
 
         self.supabase_client = create_client(supabase_url, supabase_key)
 
@@ -20,7 +23,7 @@ class SupabaseController:
     def GetuserID(self, jwt_token):
         try:
             #decodificar el token
-            payload = jwt.decode(jwt_token,verify=False)
+            payload = jwt.decode(jwt_token)
 
             #obtener el valor del id de usuario
             user_id = payload.get('id')
@@ -48,4 +51,8 @@ class SupabaseController:
         supabase.auth.sign_in_with_password({"email": "carlos@mail.com", "password": "Rest1234_"})
         session = supabase.auth.get_session().access_token
         return session
+    
+    def SignOut(self):
+        supabase = self.get_supabase_client()
+        supabase.auth.sign_out()
 

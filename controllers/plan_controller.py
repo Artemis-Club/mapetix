@@ -1,5 +1,5 @@
 from flask import request,jsonify
-from supabase_controller import SupabaseController
+from controllers.supabase_controller import SupabaseController
 import json
 
 class PlanController:
@@ -15,7 +15,6 @@ class PlanController:
         for plan in plans_json:
             plan_id = plan['plan_id']
             plan['events'] = self.get_events_for_plan(plan_id)
-
         return plans_json    
     
 
@@ -28,8 +27,6 @@ class PlanController:
         plan_events = supabase.table('plan_event').select('event_id').eq('plan_id', plan_id).execute()
         plan_events = self.processresponseNoDF(plan_events)
         event_ids = [plan_event['event_id'] for plan_event in plan_events]
-
-
         # Obtener los detalles de cada evento
         formatted_events = []
         for event_id in event_ids:
@@ -56,42 +53,7 @@ class PlanController:
                 .eq('id', event_id['id'])
                 .execute()
             for event_id in event_ids
-        ]
-
-        #dar el formato correcto a los eventos
-        formatted_events = {
-            "id": 3, 
-            "price": 200,
-            "status": null,
-            "latitude": 39.471373,
-            "longitude": -0.386638,
-            "name": "Comida guay 🥘",
-            "description": "Una comida etc xd",
-            "startAt": "2024-04-22T21:46:38.536882+00:00",
-            "endAt": "2024-04-22T21:46:38.536882+00:00",
-            "createdBy": 5,
-            "createdAt": "2024-04-22T21:46:38.536882+00:00",
-            "updatedAt": "2024-04-22T21:46:38.536882+00:00",
-            "score": 4.2, 
-            "categories": ["food", "outdoors"],
-            "distance": 39231, 
-            "timeTaken": 39231, 
-            "gallery"  :[]
-        }
-
-        #dar el formato correcto al plan POR TERMINAR
-        formatted_plan = {
-            "id": plan[0]['id'],
-            "createdAt": plan[0]['created_at'],
-            "description": plan[0]['description'],
-            "startAt": plan[0]['start_date'],
-            "endAt": plan[0]['end_at'],
-            "totalPrice": plan[0]['total_price'],
-            "userId": plan[0]['user_id'],
-            "events": formatted_events
-        }
-
-        
+        ]       
         return plan
     
 
