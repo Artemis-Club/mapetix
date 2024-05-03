@@ -11,6 +11,7 @@ def is_valid_token(token):
         try:
             test =  jwt.decode(token, secret, algorithms=["HS256"],options={"verify_aud": False ,"verify_iat":False})
             return test
+        
         except Exception as e:
             print(str(e))
 
