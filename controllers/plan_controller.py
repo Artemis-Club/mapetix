@@ -23,11 +23,11 @@ class PlanController:
         supabase = self.supabase_controller.get_supabase_client()
         #obtener el plan
         plan = supabase.table('plan').select('*').eq('plan_id', id).execute()
-        plan_json = self.processresponseNoDF(plan)
-        plan_id = plan_json['plan_id']
-        plan_json['events'] = self.get_events_for_plan(plan_id)
-
-        return plan_json
+        plans_json = self.processresponseNoDF(plan)
+        for plan in plans_json:
+            plan_id = plan['plan_id']
+            plan['events'] = self.get_events_for_plan(plan_id)
+        return plans_json 
     
 
 

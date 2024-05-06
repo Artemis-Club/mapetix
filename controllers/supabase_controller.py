@@ -48,7 +48,7 @@ class SupabaseController:
                 return None
             
         except Exception as e:
-            print(f"Error al obtener el ID de usuario del token JWT: {str(e)}")
+            #print(f"Error al obtener el ID de usuario del token JWT: {str(e)}")
             return None
 
     def Prueba(self):

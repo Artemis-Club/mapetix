@@ -18,7 +18,7 @@ class AuthMiddleware:
 
     def authenticate(self):
         auth_token = request.headers.get('Authorization')
-        print(auth_token)
+        #print(auth_token)
         if not auth_token or not self.is_valid_token(auth_token):
             raise APIException('Unauthorized', 401)
 

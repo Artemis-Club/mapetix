@@ -17,7 +17,7 @@ class PlanView:
         #print('la sesion es')
         #print(session)
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
-        print(userjwt_id)
+        #print(userjwt_id)
         if userjwt_id:
             # Si el ID de usuario existe, obtener los planes del usuario utilizando el controlador de planes
             plans = plan_controller.get_plans_by_user(jwt_token)
@@ -25,3 +25,19 @@ class PlanView:
         else:
             # Si el ID de usuario no existe, devolver un mensaje de error
             return jsonify({'error': 'Usuario no autorizado'}), 401
+        
+
+
+     # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
+    @plan_view.route('/plan/<int:id>',methods=['GET'])
+    @require_authentication
+    def get_plan(id):
+        jwt_token = request.headers.get('Authorization')
+        userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
+        #user_location = request.args.get('userLocation')
+        #if not user_location:
+        #    return jsonify({'error':'No user location provided'}),400
+        #if userjwt_id:
+        plan =  plan_controller.get_plan(id)
+        return jsonify(plan)
+        return jsonify({'error': 'Usuario no autorizado'}), 401
