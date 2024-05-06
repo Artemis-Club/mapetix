@@ -16,13 +16,12 @@ class PlanView:
         #session = supabase_controller.Prueba()
         #print('la sesion es')
         #print(session)
-        # Obtener los planes del usuario utilizando el controlador de planes
-        plans = plan_controller.get_plans_by_user(jwt_token)
-        print(plans)
-
-        # Verificar si hubo un error al obtener los planes
-        #if error:
-         #   return jsonify({'error': error}), 401  # Devolver un código de estado 401 (Unauthorized)
-
-        # Devolver los planes en formato JSON
-        return jsonify(plans)
+        userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
+        print(userjwt_id)
+        if userjwt_id:
+            # Si el ID de usuario existe, obtener los planes del usuario utilizando el controlador de planes
+            plans = plan_controller.get_plans_by_user(jwt_token)
+            return jsonify(plans)
+        else:
+            # Si el ID de usuario no existe, devolver un mensaje de error
+            return jsonify({'error': 'Usuario no autorizado'}), 401

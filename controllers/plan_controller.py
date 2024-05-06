@@ -18,6 +18,49 @@ class PlanController:
         return plans_json    
     
 
+     # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
+    def get_plan(self,id):
+        supabase = self.supabase_controller.get_supabase_client()
+        #obtener el plan
+        plan = supabase.table('plan').select('*').eq('plan_id', id).execute()
+        plan_json = self.processresponseNoDF(plan)
+        plan_id = plan_json['plan_id']
+        plan_json['events'] = self.get_events_for_plan(plan_id)
+
+        return plan_json
+    
+
+
+    # POST - /plan      Crea un plan para un usario (JWT)
+
+
+    ### PUT - /plan/:id   Modifica el plan de un usuario (id = plan_id)
+    def modify_plan(self,plan):
+        supabase = self.supabase_controller.get_supabase_client()
+        events = plan.pop('events',[])
+        try:
+            modificaPlan = supabase.table('plan').upsert(plan).execute()
+            eliminaEventos = supabase.table('plan_event').delete().eq('plan_id',plan).execute()
+            for event_id in events:
+                objeto_insert={'plan_id' : plan['plan_id'],
+                                'event_id' : event_id['id']}
+                modificaPlanEvent = supabase.table('plan_event').insert(objeto_insert).execute()
+        except Exception as e:
+            print("Error:",e)
+
+
+    ### DELETE - /plan/:id    Elimina un plan (id = plan_id)
+    def delete_plan(self,id):
+        supabase = self.supabase_controller.get_supabase_client()
+        try:
+            eliminaPlan = supabase.table('plan').delete().eq('plan_id',id).execute()
+            if eliminaPlan['status'] == 200:
+                print("Plan eliminado exitosamente.")
+            else:
+                print("Error al eliminar el plan:", eliminaPlan['error'])
+        except Exception as e:
+            print("Error:", e)
+
 
 
     def get_events_for_plan(self, plan_id):
@@ -36,39 +79,7 @@ class PlanController:
                 formatted_events.append(formatted_event)
 
         return formatted_events
-    
 
-     # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
-    def get_plan(id):
-        supabase = get_supabase_client
-        #obtener el plan
-        plan = supabase.table('plan').select('*').eq('plan_id', id).execute()
-        #obtener los eventos de un plan
-        event_ids = supabase.table('plan_event').select('event_id').eq('plan_id',id).execute()
-
-        #obtener los detalles de cada evento
-        events_details = [
-            supabase.table('events')
-                .select('*')
-                .eq('id', event_id['id'])
-                .execute()
-            for event_id in event_ids
-        ]       
-        return plan
-    
-
-
-    # POST - /plan      Crea un plan para un usario (JWT)
-
-
-    ### PUT - /plan/:id   Modifica el plan de un usuario (id = plan_id)
-
-
-
-    ### DELETE - /plan/:id    Elimina un plan (id = plan_id)
-    def delete_plan(id):
-        supabase = get_supabase_client
-        eliminaPlan = supabase.table('plan').delete().eq('plan_id',id).execute()
 
 
     def processresponseNoDF(self,response):
