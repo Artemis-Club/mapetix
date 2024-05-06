@@ -13,10 +13,11 @@ class PlanView:
     def get_plans():
         # Obtener el token JWT de la solicitud (suponiendo que está en el encabezado Authorization)
         jwt_token = request.headers.get('Authorization')
-        session = supabase_controller.Prueba()
-
+        #session = supabase_controller.Prueba()
+        #print('la sesion es')
+        #print(session)
         # Obtener los planes del usuario utilizando el controlador de planes
-        plans = plan_controller.get_plans_by_user(session)
+        plans = plan_controller.get_plans_by_user(jwt_token)
         print(plans)
 
         # Verificar si hubo un error al obtener los planes
