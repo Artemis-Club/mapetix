@@ -94,7 +94,7 @@ print(df_users.head())
 df_events = processresponse(events_data)
 print(df_events.head())
 df_valorations = processresponse(valorations_data)
-print(df_valorations)
+print(df_valorations.head())
 
 
 
@@ -190,7 +190,7 @@ def recommend_events_for_user(usuario_id):
 
     df_ratings = processresponse(valorations_data)
     df_events = processresponse(events_data)
-    df_users = processresponse(users_data)
+    df_users = processresponseusers(users_data)
 
     # Calcula la matriz de calificaciones
     df_matrix = pd.pivot_table(df_ratings, values='score', index='auth_user_id', columns='event_id').fillna(0)
@@ -218,11 +218,31 @@ def recommend_events_for_user(usuario_id):
 
     print(users_predictions2)
     fila_deseada = users_predictions2[prueba]
+    print(fila_deseada)
     user_recommendations2 = fila_deseada.argsort()[::-1]
     print('De mas a menos')
     print(user_recommendations2)
     event_ids = df_matrix.columns[user_recommendations2].tolist()
     print(event_ids)
+
+
+    event_scores_dict = {event_id: score for event_id, score in zip(event_ids, fila_deseada)}
+    all_event_ids = df_events['id'].tolist()
+    #print(all_event_ids)
+    for event_id in all_event_ids:
+        if event_id not in event_scores_dict:
+            event_scores_dict[event_id] = 0.
+            
+    print(event_scores_dict)
+
+
+    sorted_event_scores = sorted(event_scores_dict.items(), key=lambda x: x[1], reverse=True)
+
+    # Extraer solo los IDs de eventos ordenados según sus puntuaciones
+    sorted_event_ids = [event_id for event_id, score in sorted_event_scores]
+
+    # Imprimir el array de IDs de eventos ordenados por sus puntuaciones
+    print(sorted_event_ids)
 
     # Crear una lista para almacenar los nombres de los eventos en el mismo orden que event_ids
     event_names_ordered = []
