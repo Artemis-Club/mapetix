@@ -248,7 +248,7 @@ def recommend_events_for_user(usuario_id):
     event_names_ordered = []
 
     # Iterar sobre los IDs de evento en event_ids y buscar el nombre de cada evento en df_events
-    for event_id in event_ids:
+    for event_id in sorted_event_ids:
         event_name = df_events[df_events['id'] == event_id]['event_name'].iloc[0]
         event_names_ordered.append(event_name)
 
