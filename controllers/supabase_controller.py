@@ -61,3 +61,8 @@ class SupabaseController:
         supabase = self.get_supabase_client()
         supabase.auth.sign_out()
 
+    def get_events(self):
+        supabase = self.get_supabase_client()
+        events = supabase.table('event').select('*').order('id', desc=False).execute()
+        return events
+

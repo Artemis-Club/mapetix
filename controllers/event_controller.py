@@ -1,9 +1,14 @@
 from flask import request,jsonify
 from algoritmobueno import recommend_events_for_user
+from controllers.supabase_controller import SupabaseController
+from controllers.plan_controller import PlanController
 import math
 
 class EventController:
 
+    def __init__(self):
+        self.supabase_controller = SupabaseController()
+        self.plan_controller = PlanController()
 
     ### GET - /events
     def get_events(self, user_id,ubicacion):
@@ -48,3 +53,6 @@ class EventController:
         # Radio de la Tierra en km
         r = 6371
         return c * r
+    
+
+    

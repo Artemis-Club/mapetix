@@ -41,3 +41,16 @@ class PlanView:
         plan =  plan_controller.get_plan(id)
         return jsonify(plan)
         return jsonify({'error': 'Usuario no autorizado'}), 401
+    
+    @plan_view.route('/plan/rate/<int:id>',methods=['POST'])
+    @require_authentication
+    def rate_event(id):
+        jwt_token = request.headers.get('Authorization')
+        userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
+        #user_location = request.args.get('userLocation')
+        #if not user_location:
+        #    return jsonify({'error':'No user location provided'}),400
+        #if userjwt_id:
+        plan =  plan_controller.valorate_event(id,jwt_token,nota,description_val)
+        return jsonify(plan)
+        return jsonify({'error': 'Usuario no autorizado'}), 401
