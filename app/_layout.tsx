@@ -26,7 +26,18 @@ export default function RootLayout() {
           <Stack.Screen name="auth/signup" options={{ headerShown: true }} />
           <Stack.Screen
             name="plan/[planId]"
-            options={{ headerShown: true, headerTransparent: false }}
+            options={{
+              headerShown: true,
+              headerTransparent: false,
+            }}
+          />
+          <Stack.Screen
+            name="event/[eventId]"
+            options={{
+              headerShown: true,
+              headerTransparent: false,
+              presentation: 'modal',
+            }}
           />
         </Stack>
       </GestureHandlerRootView>
