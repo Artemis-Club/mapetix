@@ -4,6 +4,7 @@ import { Text, PlanCard, Icon, Image } from '@/components';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useGetEventDetailQuery } from '@/api/event';
 import Carousel from 'react-native-reanimated-carousel';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
@@ -11,6 +12,7 @@ export default function EventDetails() {
   const router = useRouter();
   const { eventId } = useLocalSearchParams();
   const { data = {}, isLoading } = useGetEventDetailQuery(eventId);
+  const { top } = useSafeAreaInsets();
 
   const event = {
     id: data.id,
@@ -47,6 +49,7 @@ export default function EventDetails() {
       <TouchableOpacity
         onPress={() => router.back()}
         className="absolute top-4 right-4"
+        style={{ marginTop: top }}
       >
         <Icon name="window-close" />
       </TouchableOpacity>
