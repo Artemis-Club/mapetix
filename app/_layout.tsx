@@ -34,7 +34,7 @@ export default function RootLayout() {
           <Stack.Screen
             name="event/[eventId]"
             options={{
-              headerShown: true,
+              headerShown: false,
               headerTransparent: false,
               presentation: 'modal',
             }}

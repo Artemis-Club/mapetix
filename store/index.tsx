@@ -17,6 +17,7 @@ import React from 'react';
 
 import authApi from '@/api/auth';
 import planApi from '@/api/plan';
+import eventApi from '@/api/event';
 
 const persistConfig = {
   key: 'root',
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [planApi.reducerPath]: planApi.reducer,
+  [eventApi.reducerPath]: eventApi.reducer,
 });
 
 export const store = configureStore({
@@ -41,7 +43,8 @@ export const store = configureStore({
     })
       .concat(userApi.middleware)
       .concat(authApi.middleware)
-      .concat(planApi.middleware),
+      .concat(planApi.middleware)
+      .concat(eventApi.middleware),
 });
 
 setupListeners(store.dispatch);
