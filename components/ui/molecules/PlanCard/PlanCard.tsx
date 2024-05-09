@@ -21,6 +21,7 @@ export interface PlanCardProps {
   description: string;
   style?: object;
   className?: string;
+  from?: string;
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({
@@ -35,11 +36,12 @@ const PlanCard: React.FC<PlanCardProps> = ({
   description,
   id,
   style,
+  from,
 }) => {
   const router = useRouter();
 
   const onCardPress = () => {
-    router.push(`/event/${id}`);
+    router.push(`/event/${id}?from=${from}`);
   };
 
   if (!id) return null;

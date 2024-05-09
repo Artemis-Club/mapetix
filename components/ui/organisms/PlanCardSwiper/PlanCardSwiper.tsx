@@ -11,6 +11,7 @@ interface PlanCardSwiperProps {
   style?: object;
   className?: string;
   onPlanSelected?: (index: number) => void;
+  from?: string;
 }
 
 const PlanCardSwiper: React.FC<PlanCardSwiperProps> = ({
@@ -18,6 +19,7 @@ const PlanCardSwiper: React.FC<PlanCardSwiperProps> = ({
   focusedEvent,
   onPlanSelected,
   style,
+  from,
 }) => {
   const carouselRef = useRef<ICarouselInstance>(null);
 
@@ -37,7 +39,7 @@ const PlanCardSwiper: React.FC<PlanCardSwiperProps> = ({
         data={planCards}
         mode="parallax"
         renderItem={({ index, item }) => (
-          <PlanCard className="h-full" key={item.id} {...item} />
+          <PlanCard className="h-full" key={item.id} from={from} {...item} />
         )}
       />
     </View>

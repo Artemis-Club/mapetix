@@ -97,6 +97,7 @@ export default function Map() {
         focusedEvent={focusedEvent}
         onPlanSelected={setFocusedEvent}
         className="absolute bottom-1"
+        from={selectedPlan ? 'plan' : 'explore'}
       />
     </>
   );

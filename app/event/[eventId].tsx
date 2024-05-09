@@ -10,7 +10,7 @@ const PAGE_WIDTH = Dimensions.get('window').width;
 
 export default function EventDetails() {
   const router = useRouter();
-  const { eventId } = useLocalSearchParams();
+  const { eventId, from } = useLocalSearchParams();
   const { data = {}, isLoading } = useGetEventDetailQuery(eventId);
   const { top } = useSafeAreaInsets();
 
@@ -46,10 +46,17 @@ export default function EventDetails() {
           <Image className="h-full" key={index} source={item} />
         )}
       />
+      <View
+        pointerEvents="none"
+        className="absolute flex justify-end z-20 t-0 bg-[#00000033] w-full"
+        style={{ height: PAGE_WIDTH / 1.5 }}
+      >
+        <Text className="text-2xl font-black mb-2 ml-2">{event.title}</Text>
+      </View>
       <TouchableOpacity
         onPress={() => router.back()}
-        className="absolute top-4 right-4"
-        style={{ marginTop: top }}
+        className="absolute right-4 z-30"
+        style={{ top: top }}
       >
         <Icon name="window-close" />
       </TouchableOpacity>
