@@ -7,7 +7,7 @@ export const mapSettings = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   },
-  provider: PROVIDER_GOOGLE,
+  // provider: PROVIDER_GOOGLE, //TEMP
   showsCompass: false,
   customMapStyle: [
     {

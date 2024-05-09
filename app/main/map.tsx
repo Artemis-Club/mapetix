@@ -14,11 +14,7 @@ export default function Map() {
   const [selectedPlan, setSelectedPlan] = useState('1');
   const [focusedEvent, setFocusedEvent] = useState(0);
 
-  const {
-    data: plan = { events: [] },
-    isLoading,
-    error,
-  } = useGetPlanDetailsQuery(selectedPlan);
+  const { data: plan = {events:[]}, isLoading, error } = useGetPlanDetailsQuery(selectedPlan);
 
   const markers = plan?.events.map(({ coord_x, coord_y }) => ({
     coordinate: {
