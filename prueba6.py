@@ -53,21 +53,22 @@ def filter_events_by_criteria(event_ids, events, target_date, max_price):
         for event_id in event_ids:
             for event in events:
                 if event['id'] == event_id:
-                    print(f"Checking event {event_id}:")
+                    #print(f"Checking event {event_id}:")
                     if event['start_date'] <= target_date <= event['finish_date'] and (event['price'] is None or event['price'] <= max_price):
-                        print(f"Event {event_id} meets criteria and added to filtered events.")
+                        #print(f"Event {event_id} meets criteria and added to filtered events.")
                         filtered_events.append(event)
-                    else:
-                        print(f"Event {event_id} does not meet criteria and is skipped.")
+                    #else:
+                        #print(f"Event {event_id} does not meet criteria and is skipped.")
                     break  # Salir del bucle interno una vez que se encuentra el evento
         return filtered_events
     
 
-def filter_events_by_distance(self,events, user_location, max_distance_km):
+def filter_events_by_distance(events, user_location, max_distance_km):
     filtered_events = []
     for event in events:
-        event_location = (event['latitude'], event['longitude'])
-        distance = self.calcular_distancia_osm(user_location[0], user_location[1], event_location[0], event_location[1])
+        event_location = (event['coord_x'], event['coord_y'])
+        distance = calcular_distancia_osm(user_location[0], user_location[1], event_location[0], event_location[1])
+        print(distance)
         if distance <= max_distance_km:
             filtered_events.append(event)
     return filtered_events
@@ -75,16 +76,7 @@ def filter_events_by_distance(self,events, user_location, max_distance_km):
 
 from geopy.distance import geodesic
 def calcular_distancia_osm(lat1, lon1, lat2, lon2):
-    """
-    Calcula la distancia en kilómetros entre dos puntos
-    utilizando OpenStreetMap y la biblioteca geopy.
-    
-    :param lat1: Latitud del primer punto en grados decimales
-    :param lon1: Longitud del primer punto en grados decimales
-    :param lat2: Latitud del segundo punto en grados decimales
-    :param lon2: Longitud del segundo punto en grados decimales
-    :return: Distancia entre los dos puntos en kilómetros
-    """
+
     # Coordenadas de los puntos
     punto1 = (lat1, lon1)
     punto2 = (lat2, lon2)
@@ -95,10 +87,13 @@ def calcular_distancia_osm(lat1, lon1, lat2, lon2):
     return distancia
 
 
+prueba = calcular_distancia_osm(39.480609,-0.3589077,39.470019,-0.337169)
+#print(prueba)
+
 id_usuario = '200edb15-5f6f-4b9f-b70c-eab63bd188a2'
 
 eventos_ordenados = recommend_events_for_user(id_usuario)
-print(eventos_ordenados)
+#print(eventos_ordenados)
 
 eventos = get_events()
 eventosjson = processresponseNoDF(eventos)
@@ -108,8 +103,22 @@ target_date = '2024-04-23'
 target_price = 3
 
 eventos_filtrados = filter_events_by_criteria(eventos_ordenados,eventosjson,target_date,target_price)
-print('Los eventos filtrados son : ')
-print(eventos_filtrados)
+#print(eventos_filtrados)
+#print('Los eventos filtrados son : ')
+eventos2 =[]
+for event in eventos_filtrados:
+    eventos2.append(event['id'])
+#print(eventos2)
+
+user_location = 39.480609 , -0.3589077
+max_km = 3
+ultimo_filtro = filter_events_by_distance(eventos_filtrados,user_location,3)
+eventos3 =[]
+for event in ultimo_filtro:
+    eventos3.append(event['id'])
+print(eventos3)
+#print(ultimo_filtro)
+#print(eventos_filtrados)
 
 #session = supabase.auth.get_session().access_token
 #print('sesion:')

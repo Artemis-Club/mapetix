@@ -2,6 +2,7 @@ import os
 import jwt
 from supabase import create_client
 from dotenv import load_dotenv
+import json
 
 class SupabaseController:
 
@@ -65,4 +66,21 @@ class SupabaseController:
         supabase = self.get_supabase_client()
         events = supabase.table('event').select('*').order('id', desc=False).execute()
         return events
+    
+    def processresponseNoDF(self,response):
+        try:
+            # Obtener los datos en formato JSON utilizando el método model_dump_json()
+            response_json = response.model_dump_json()
+
+            # Convertir los datos en un diccionario
+            response_dict = json.loads(response_json)
+
+            # Acceder a los datos de las valoraciones
+            valorations_data = response_dict['data']
+
+            return valorations_data
+
+        except Exception as e:
+            print("Error:", e)
+            return None
 

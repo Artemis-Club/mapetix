@@ -3,6 +3,7 @@ from controllers.supabase_controller import SupabaseController
 import json
 from datetime import datetime
 from algoritmopruebausers import recommend_events_for_user
+from geopy.distance import geodesic
 
 class PlanController:
     def __init__(self):
@@ -21,16 +22,75 @@ class PlanController:
     
 
      # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
-    def get_plan(self,id):
+    def get_plan(self,id,userLocation):
         supabase = self.supabase_controller.get_supabase_client()
         #obtener el plan
         plan = supabase.table('plan').select('*').eq('plan_id', id).execute()
         plans_json = self.processresponseNoDF(plan)
         for plan in plans_json:
             plan_id = plan['plan_id']
-            plan['events'] = self.get_events_for_plan(plan_id)
+            eventos = self.get_events_for_plan(plan_id)
+            for evento in eventos:
+                event_location = (evento['coord_x'], evento['coord_y'])
+                distance = self.calcular_distancia_osm(userLocation[0], userLocation[1], event_location[0], event_location[1])
+                evento['distance'] = distance
+            plan['events'] = eventos
         return plans_json 
     
+    def create_plan2(self,userid,ubicacion,max_distance,target_date,max_price):
+        supabase = self.supabase_controller.get_supabase_client()
+
+        #obtener los eventos para el usuario
+        events = recommend_events_for_user(userid)
+        allevents = self.supabase_controller.get_events()
+        allevents = self.processresponseNoDF(allevents)
+        events = self.filter_events_by_criteria(events,allevents,target_date,max_price)
+        #filtrar los eventos segun el radio pasado por el front
+        events = self.filter_events_by_distance(events, ubicacion, max_distance)
+
+        treseventos = events[:3]
+
+        if not treseventos:
+            raise Exception("No se encontraron eventos que cumplan los criterios para crear el plan")
+
+        created_at = datetime.now().timestamp()
+        total_price = sum(evento['price'] for evento in treseventos)
+        # Extrae las direcciones de inicio y fin
+        start_direction = treseventos[0]['direccion_event'] if treseventos else None
+        finish_direction = treseventos[-1]['direccion_event'] if treseventos else None
+        plan = {
+            'created_at': created_at,
+            'start_date': target_date,
+            'finish_date': target_date,
+            'start_direction': start_direction,
+            'finish_direction': finish_direction,
+            'total_price': total_price,
+            'user_id': userid
+        }
+
+        response = supabase.table('plan').insert(plan).execute()
+        if response.error:
+            print("Error al crear el plan",response.error)
+        formatResponse = self.processresponseNoDF(response)
+        for plan in formatResponse:
+            plan_id = plan['plan_id']
+
+        for evento in treseventos:
+            plan_event = {
+                'plan_id': plan_id,
+                'event_id' : evento['id']
+            }
+            response = supabase.table('plan_event').insert(plan_event).execute()
+            if response.error:
+                print("Error al insertar evento en plan_event:", response.error)
+
+        for pla in plan:
+            pla['eventos'] = treseventos
+
+        return plan
+
+
+
 
 
     def create_plan(self,jwt_token,ubicacion,max_distance,target_date,max_price):
@@ -42,7 +102,7 @@ class PlanController:
         allevents = self.processresponseNoDF(allevents)
         events = self.filter_events_by_criteria(events,allevents,target_date,max_price)
         #filtrar los eventos segun el radio pasado por el front
-        events = self.filtrarEventosPorDistancia(events, ubicacion, max_distance)
+        events = self.filter_events_by_distance(events, ubicacion, max_distance)
         
         #crear un objeto plan en supabase y meter los eventos en plan_event
         created_at = datetime.datetime.now()
@@ -189,6 +249,37 @@ class PlanController:
                         print(f"Event {event_id} does not meet criteria and is skipped.")
                     break  # Salir del bucle interno una vez que se encuentra el evento
         return filtered_events
+    
+
+    def filter_events_by_distance(self,events, user_location, max_distance_km):
+        filtered_events = []
+        for event in events:
+            event_location = (event['coord_x'], event['coord_y'])
+            distance = self.calcular_distancia_osm(user_location[0], user_location[1], event_location[0], event_location[1])
+            if distance <= max_distance_km:
+                filtered_events.append(event)
+        return filtered_events
+    
+
+    def calcular_distancia_osm(lat1, lon1, lat2, lon2):
+        """
+        Calcula la distancia en kilómetros entre dos puntos
+        utilizando OpenStreetMap y la biblioteca geopy.
+        
+        :param lat1: Latitud del primer punto en grados decimales
+        :param lon1: Longitud del primer punto en grados decimales
+        :param lat2: Latitud del segundo punto en grados decimales
+        :param lon2: Longitud del segundo punto en grados decimales
+        :return: Distancia entre los dos puntos en kilómetros
+        """
+        # Coordenadas de los puntos
+        punto1 = (lat1, lon1)
+        punto2 = (lat2, lon2)
+        
+        # Calcular distancia utilizando geopy
+        distancia = geodesic(punto1, punto2).kilometers
+        
+        return distancia
 
     def valorate_event(self,event_id,jwt_token,nota,description_val):
         supabase = self.supabase_controller.get_supabase_client()

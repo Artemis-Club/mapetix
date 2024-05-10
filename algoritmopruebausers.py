@@ -13,17 +13,17 @@ supabase : Client = create_client(url, key)
 
 def get_events():
     events = supabase.table('event').select('*').order('id', desc=False).execute()
-    #print(events)
+    ##print(events)
     return events
 
 def get_users():
     profiles = supabase.table('user').select('*').order('id', desc=False).execute()
     users = supabase.auth.admin.list_users()
-    #print(users)
+    ##print(users)
     ids_usuarios = [usuario.id for usuario in users]
-    #print(ids_usuarios)
+    ##print(ids_usuarios)
     users_sorted = sorted(ids_usuarios)
-    #print(users_sorted)
+    ##print(users_sorted)
     return users_sorted
 
 def get_valorations():
@@ -49,7 +49,7 @@ def processresponse(response):
         return df_bien
 
     except Exception as e:
-        print("Error:", e)
+        #print("Error:", e)
         return None
     
 
@@ -62,7 +62,7 @@ def processresponseusers(response):
         return df_bien
 
     except Exception as e:
-        print("Error:", e)
+        #print("Error:", e)
         return None
     
 def processresponseNoDF(response):
@@ -79,7 +79,7 @@ def processresponseNoDF(response):
         return valorations_data
 
     except Exception as e:
-        print("Error:", e)
+        #print("Error:", e)
         return None
 
 
@@ -89,12 +89,12 @@ users_data = get_users()
 valorations_data = get_valorations()
 
 df_users = processresponseusers(users_data)
-#print(df_users)
-print(df_users.head())
+##print(df_users)
+##print(df_users.head())
 df_events = processresponse(events_data)
-print(df_events.head())
+##print(df_events.head())
 df_valorations = processresponse(valorations_data)
-print(df_valorations.head())
+##print(df_valorations.head())
 
 
 
@@ -123,11 +123,11 @@ def recommend_events(similarity_matrix, ratings_matrix,usuario_id,df_matrix):
                     for similar_user_id, similarity in enumerate(similarity_matrix[user_id]):
                         similar_user_rating = ratings_matrix[similar_user_id, event_id]
                         if similarity != 0 and similar_user_rating != 0 :
-                            print('El rating del user : ')
-                            print(similar_user_id+1)
-                            print('Para el evento : ')
-                            print(event_id+1)
-                            print(similar_user_rating)
+                            #print('El rating del user : ')
+                            #print(similar_user_id+1)
+                            #print('Para el evento : ')
+                            #print(event_id+1)
+                            #print(similar_user_rating)
                         
                             # Transformación de las valoraciones
                             transformed_rating = (similar_user_rating - 5) * (10 / 5)
@@ -138,19 +138,19 @@ def recommend_events(similarity_matrix, ratings_matrix,usuario_id,df_matrix):
                             recommendation_score += weighted_rating
                             if similarity != 0 and transformed_rating != -10:
                                 contador += 1
-                            print('Score : ')
-                            print(recommendation_score)
-                            print('Contador :')
-                            print(contador) 
+                            #print('Score : ')
+                            #print(recommendation_score)
+                            #print('Contador :')
+                            #print(contador) 
                     if recommendation_score!= -10:
                         if contador != 0:
                             recommendation_score/=contador
 
                     recommendation_matrix[user_id, event_id] = recommendation_score
-                    print('El score para el user y evento')
-                    print(user_id+1)
-                    print(event_id+1)
-                    print(recommendation_score)
+                    #print('El score para el user y evento')
+                    #print(user_id+1)
+                    #print(event_id+1)
+                    #print(recommendation_score)
 
     return recommendation_matrix
 
@@ -195,14 +195,14 @@ def recommend_events_for_user(usuario_id):
     # Calcula la matriz de calificaciones
     df_matrix = pd.pivot_table(df_ratings, values='score', index='auth_user_id', columns='event_id').fillna(0)
     ratings = df_matrix.values
-    print(df_matrix)
-    print(ratings)
-    #print(df_matrix.index[0][0])
+    #print(df_matrix)
+    #print(ratings)
+    ##print(df_matrix.index[0][0])
     # Calcula la similitud de coseno entre usuarios
     sim_matrix = calculate_similarity_matrix(ratings)
-    print(sim_matrix)
+    #print(sim_matrix)
     
-    print(sim_matrix.shape)
+    #print(sim_matrix.shape)
 
     users_predictions2 = recommend_events(sim_matrix,ratings,usuario_id,df_matrix)
 
@@ -212,28 +212,28 @@ def recommend_events_for_user(usuario_id):
     n_users, n_events = ratings.shape
     for user_id in range(n_users): 
         user_id_actual = df_matrix.index[user_id]
-        print(user_id_actual)
+        #print(user_id_actual)
         if user_id_actual == usuario_id:
             prueba = user_id
 
-    print(users_predictions2)
+    #print(users_predictions2)
     fila_deseada = users_predictions2[prueba]
-    print(fila_deseada)
+    #print(fila_deseada)
     user_recommendations2 = fila_deseada.argsort()[::-1]
-    print('De mas a menos')
-    print(user_recommendations2)
+    #print('De mas a menos')
+    #print(user_recommendations2)
     event_ids = df_matrix.columns[user_recommendations2].tolist()
-    print(event_ids)
+    #print(event_ids)
 
 
     event_scores_dict = {event_id: score for event_id, score in zip(event_ids, fila_deseada)}
     all_event_ids = df_events['id'].tolist()
-    #print(all_event_ids)
+    ##print(all_event_ids)
     for event_id in all_event_ids:
         if event_id not in event_scores_dict:
             event_scores_dict[event_id] = 0.
             
-    print(event_scores_dict)
+    #print(event_scores_dict)
 
 
     sorted_event_scores = sorted(event_scores_dict.items(), key=lambda x: x[1], reverse=True)
@@ -242,7 +242,7 @@ def recommend_events_for_user(usuario_id):
     sorted_event_ids = [event_id for event_id, score in sorted_event_scores]
 
     # Imprimir el array de IDs de eventos ordenados por sus puntuaciones
-    print(sorted_event_ids)
+    #print(sorted_event_ids)
 
     # Crear una lista para almacenar los nombres de los eventos en el mismo orden que event_ids
     event_names_ordered = []
@@ -252,10 +252,9 @@ def recommend_events_for_user(usuario_id):
         event_name = df_events[df_events['id'] == event_id]['event_name'].iloc[0]
         event_names_ordered.append(event_name)
 
-    print(event_names_ordered)
-
-    return event_ids    
+    #print(event_names_ordered)
+    return sorted_event_ids    
 # Llama a la función con el nombre de usuario deseado
-recommendations = recommend_events_for_user('f738e219-5d68-441f-8e6b-6544a4d8a237')
-print(recommendations)
+recommendations = recommend_events_for_user('0377f09b-7107-4989-aa74-87d86fd5c799')
+#print(recommendations)
 
