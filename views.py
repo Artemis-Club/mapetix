@@ -40,10 +40,12 @@ class PlanView:
         if userjwt_id:
             plan =  plan_controller.get_plan(id,user_location)
             return jsonify(plan)
-        return jsonify({'error': 'Usuario no autorizado'}), 401
+        else:
+            # Si el ID de usuario no existe, devolver un mensaje de error
+            return jsonify({'error': 'Usuario no autorizado'}), 401
     
 
-    
+
     @plan_view.route('/allevents', methods=['GET'])
     @require_authentication  # Aplicar el middleware de autenticación
     def get_all_events():
@@ -69,13 +71,16 @@ class PlanView:
     def rate_event(id):
         jwt_token = request.headers.get('Authorization')
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
-        #user_location = request.args.get('userLocation')
+        nota = request.args.get('Nota')
+        description_val = request.args.get('Description')
         #if not user_location:
         #    return jsonify({'error':'No user location provided'}),400
-        #if userjwt_id:
-        plan =  plan_controller.valorate_event(id,jwt_token,nota,description_val)
-        return jsonify(plan)
-        return jsonify({'error': 'Usuario no autorizado'}), 401
+        if userjwt_id:
+            plan =  plan_controller.valorate_event(id,jwt_token,nota,description_val)
+            return jsonify(plan)
+        else:
+            # Si el ID de usuario no existe, devolver un mensaje de error
+            return jsonify({'error': 'Usuario no autorizado'}), 401
     
     @plan_view.route('/plan',methods=['POST'])
     @require_authentication
@@ -93,7 +98,7 @@ class PlanView:
             userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
             #print(userjwt_id)
             if userjwt_id:
-                # Si el ID de usuario existe, obtener los planes del usuario utilizando el controlador de planes
+                
                 plans = plan_controller.create_plan2(userjwt_id,user_location,max_distance,target_date,max_price)
                 return jsonify(plans)
             else:
