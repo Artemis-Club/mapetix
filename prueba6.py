@@ -3,10 +3,11 @@ from supabase import create_client
 import os
 from dotenv import load_dotenv
 import json
-from algoritmopruebausers import recommend_events_for_user,get_events,processresponseNoDF
+from algoritmopruebausers import Algoritmo
+from controllers.supabase_controller import SupabaseController
 
-
-
+algoritmo_controller = Algoritmo()
+supabase_controller = SupabaseController()
 
 load_dotenv()
 supabase_url = os.getenv('SUPABASE_URL')
@@ -90,13 +91,13 @@ def calcular_distancia_osm(lat1, lon1, lat2, lon2):
 prueba = calcular_distancia_osm(39.480609,-0.3589077,39.470019,-0.337169)
 #print(prueba)
 
-id_usuario = '200edb15-5f6f-4b9f-b70c-eab63bd188a2'
+id_usuario = '0377f09b-7107-4989-aa74-87d86fd5c799'
 
-eventos_ordenados = recommend_events_for_user(id_usuario)
+eventos_ordenados = algoritmo_controller.recommend_events_for_user(id_usuario)
 #print(eventos_ordenados)
 
-eventos = get_events()
-eventosjson = processresponseNoDF(eventos)
+eventos = algoritmo_controller.get_events()
+eventosjson = supabase_controller.processresponseNoDF(eventos)
 #print(eventosjson)
 
 target_date = '2024-04-23'

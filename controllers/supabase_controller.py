@@ -3,6 +3,7 @@ import jwt
 from supabase import create_client
 from dotenv import load_dotenv
 import json
+import pandas as pd
 
 class SupabaseController:
 
@@ -67,6 +68,22 @@ class SupabaseController:
         events = supabase.table('event').select('*').order('id', desc=False).execute()
         return events
     
+    def get_users(self):
+        supabase = self.get_supabase_client()
+        profiles = supabase.table('user').select('*').order('id', desc=False).execute()
+        users = supabase.auth.admin.list_users()
+        ##print(users)
+        ids_usuarios = [usuario.id for usuario in users]
+        ##print(ids_usuarios)
+        users_sorted = sorted(ids_usuarios)
+        ##print(users_sorted)
+        return users_sorted
+
+    def get_valorations(self):
+        supabase = self.get_supabase_client()
+        plans = supabase.table('valoration_event').select('*').execute()
+        return plans
+    
     def processresponseNoDF(self,response):
         try:
             # Obtener los datos en formato JSON utilizando el método model_dump_json()
@@ -82,5 +99,38 @@ class SupabaseController:
 
         except Exception as e:
             print("Error:", e)
+            return None
+        
+    def processresponse(self,response):
+        try:
+            # Obtener los datos en formato JSON utilizando el método model_dump_json()
+            response_json = response.model_dump_json()
+
+            # Convertir los datos en un diccionario
+            response_dict = json.loads(response_json)
+
+            # Acceder a los datos de las valoraciones
+            valorations_data = response_dict['data']
+
+            # Convertir los datos en un DataFrame de Pandas
+            df_bien = pd.DataFrame(valorations_data)
+
+            return df_bien
+
+        except Exception as e:
+            #print("Error:", e)
+            return None
+    
+
+    def processresponseusers(self,response):
+        try:
+
+            # Convertir los datos en un DataFrame de Pandas
+            df_bien = pd.DataFrame(response)
+
+            return df_bien
+
+        except Exception as e:
+            #print("Error:", e)
             return None
 

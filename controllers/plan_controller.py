@@ -2,12 +2,13 @@ from flask import request,jsonify
 from controllers.supabase_controller import SupabaseController
 import json
 from datetime import datetime
-from algoritmopruebausers import recommend_events_for_user
+from algoritmopruebausers import Algoritmo
 from geopy.distance import geodesic
 
 class PlanController:
     def __init__(self):
         self.supabase_controller = SupabaseController()
+        self.algoritmo_controller = Algoritmo()
 
     # GET - /plans      Obtiene los planes ya hecho por el usuario (JWT)
     def get_plans_by_user(self, jwt_token):
@@ -41,7 +42,7 @@ class PlanController:
         supabase = self.supabase_controller.get_supabase_client()
 
         #obtener los eventos para el usuario
-        events = recommend_events_for_user(userid)
+        events = self.algoritmo_controller.recommend_events_for_user(userid)
         allevents = self.supabase_controller.get_events()
         allevents = self.processresponseNoDF(allevents)
         events = self.filter_events_by_criteria(events,allevents,target_date,max_price)
@@ -97,7 +98,7 @@ class PlanController:
         supabase = self.supabase_controller.get_supabase_client()
 
         #obtener los eventos para el usuario
-        events = recommend_events_for_user(jwt_token)
+        events = self.algoritmo_controller.recommend_events_for_user(jwt_token)
         allevents = self.supabase_controller.get_events()
         allevents = self.processresponseNoDF(allevents)
         events = self.filter_events_by_criteria(events,allevents,target_date,max_price)
