@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   style,
 }) => {
   const buttonStyles =
-    stylish === 'fill' ? 'bg-purple-500' : 'border border-purple-600';
+    stylish === 'fill' ? 'bg-purple-500' : 'border border-orange-600';
   const textStyles = stylish === 'fill' ? 'text-white' : 'text-orange-600';
   return (
     <TouchableOpacity
