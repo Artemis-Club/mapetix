@@ -25,7 +25,25 @@ class PlanView:
         else:
             # Si el ID de usuario no existe, devolver un mensaje de error
             return jsonify({'error': 'Usuario no autorizado'}), 401
-        
+
+
+
+     # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
+    @plan_view.route('/plan/<int:id>',methods=['GET'])
+    @require_authentication
+    def get_plan(id):
+        jwt_token = request.headers.get('Authorization')
+        userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
+        user_location = request.args.get('userLocation')
+        #if not user_location:
+        #    return jsonify({'error':'No user location provided'}),400
+        if userjwt_id:
+            plan =  plan_controller.get_plan(id,user_location)
+            return jsonify(plan)
+        return jsonify({'error': 'Usuario no autorizado'}), 401
+    
+
+    
     @plan_view.route('/allevents', methods=['GET'])
     @require_authentication  # Aplicar el middleware de autenticación
     def get_all_events():
@@ -45,19 +63,6 @@ class PlanView:
             # Si el ID de usuario no existe, devolver un mensaje de error
             return jsonify({'error': 'Usuario no autorizado'}), 401
 
-     # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
-    @plan_view.route('/plan/<int:id>',methods=['GET'])
-    @require_authentication
-    def get_plan(id):
-        jwt_token = request.headers.get('Authorization')
-        userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
-        user_location = request.args.get('userLocation')
-        #if not user_location:
-        #    return jsonify({'error':'No user location provided'}),400
-        if userjwt_id:
-            plan =  plan_controller.get_plan(id,user_location)
-            return jsonify(plan)
-        return jsonify({'error': 'Usuario no autorizado'}), 401
     
     @plan_view.route('/plan/rate/<int:id>',methods=['POST'])
     @require_authentication
