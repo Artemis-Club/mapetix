@@ -19,7 +19,11 @@ const Text: React.FC<TextProps> = ({
 }) => {
   const textStyle = fit ? 'font-thin' : bold ? 'font-bold' : 'font-regular';
   return (
-    <RNText className={clsx(textStyle, 'text-white')} style={style} {...props}>
+    <RNText
+      className={clsx(textStyle, 'text-white text-center')}
+      style={style}
+      {...props}
+    >
       {children}
     </RNText>
   );
