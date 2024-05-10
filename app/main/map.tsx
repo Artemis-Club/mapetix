@@ -11,7 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Map() {
   const [isPlanSelectorOpened, setIsPlanSelectorOpened] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState('1');
+  const [selectedPlan, setSelectedPlan] = useState(null);
   const [focusedEvent, setFocusedEvent] = useState(0);
 
   const {

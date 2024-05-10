@@ -1,6 +1,6 @@
 import { TouchableOpacity, View, Dimensions } from 'react-native';
 import { Text, PlanCard, Icon, Image } from '@/components';
-
+import { Rating } from 'react-native-ratings';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useGetEventDetailQuery } from '@/api/event';
 import Carousel from 'react-native-reanimated-carousel';
@@ -52,6 +52,39 @@ export default function EventDetails() {
         style={{ height: PAGE_WIDTH / 1.5 }}
       >
         <Text className="text-2xl font-black mb-2 ml-2">{event.title}</Text>
+      </View>
+
+      <View className="absolute top-1/3 left-0 flex flex-row items-center ml-4">
+        <Icon name="star-outline" className=" text-yellow-500" />
+        <View>
+          <Text className="text-2xl font-black ml-2  text-yellow-500">
+            {event.price}
+          </Text>
+        </View>
+        <Icon name="clock-time-eight-outline" className="ml-16" />
+        <View>
+          <Text className="text-2xl font-black ml-2">{event.hourStart}</Text>
+        </View>
+        <Icon name="currency-eur" className="text-emerald-500 ml-12" />
+        <View>
+          <Text className="text-2xl font-black ml-2 text-emerald-500">
+            {event.price}
+          </Text>
+        </View>
+      </View>
+      <View className="absolute top-80 flex items-center ml-12">
+        <Rating
+          showRating
+          style={{ paddingVertical: 10 }}
+          type="star"
+          ratingColor="yellow-500"
+          ratingCount={5}
+          imageSize={50}
+          tintColor="#262626"
+        ></Rating>
+      </View>
+      <View className="absolute top-2/3 flex items-center ml-12">
+        <Text>{event.description}</Text>
       </View>
       <TouchableOpacity
         onPress={() => router.back()}
