@@ -11,9 +11,8 @@ class PlanController:
         self.algoritmo_controller = Algoritmo()
 
     # GET - /plans      Obtiene los planes ya hecho por el usuario (JWT)
-    def get_plans_by_user(self, jwt_token):
+    def get_plans_by_user(self, userjwt_id):
         supabase = self.supabase_controller.get_supabase_client()
-        userjwt_id = self.supabase_controller.GetUserIdFromjwt(jwt_token)
         plans_by_user = supabase.table('plan').select('*').eq('user_id', userjwt_id).execute()
         plans_json = self.processresponseNoDF(plans_by_user)
         for plan in plans_json:
@@ -21,6 +20,16 @@ class PlanController:
             plan['events'] = self.get_events_for_plan(plan_id)
         return plans_json    
     
+    def get_events_by_user(self,userjwt_id):
+        supabase = self.supabase_controller.get_supabase_client()
+        # Obtener los event_ids asociados al plan_id
+        plan_events = supabase.table('valoration_event').select('event_id').eq('auth_user_id', userjwt_id).execute()
+        lista = []
+        plan_events = self.supabase_controller.processresponseNoDF(plan_events)
+        for plan in plan_events:
+            id = plan['event_id']
+            lista.append(id)
+        return lista 
 
      # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
     def get_plan(self,id,userLocation):
@@ -40,15 +49,21 @@ class PlanController:
     
     def create_plan2(self,userid,ubicacion,max_distance,target_date,max_price):
         supabase = self.supabase_controller.get_supabase_client()
-
         #obtener los eventos para el usuario
         events = self.algoritmo_controller.recommend_events_for_user(userid)
         allevents = self.supabase_controller.get_events()
         allevents = self.processresponseNoDF(allevents)
-        events = self.filter_events_by_criteria(events,allevents,target_date,max_price)
+        events_valored = self.get_events_by_user(userid)
+        #print(events_valored)
+        events = self.filter_events_by_criteria(events,allevents,target_date,max_price,events_valored)
+        eventos2 =[]
+        for event in events:
+            eventos2.append(event['id'])
+        print(eventos2)
+        #print(events)
         #filtrar los eventos segun el radio pasado por el front
         events = self.filter_events_by_distance(events, ubicacion, max_distance)
-
+        print(events)
         treseventos = events[:3]
 
         if not treseventos:
@@ -148,9 +163,8 @@ class PlanController:
                     print("Error al insertar evento en plan_event:", response.error)
 
 
-    def valorate_events(self,event_id,jwt_token,nota,description_val):
+    def valorate_events(self,event_id,userjwt_id,nota,description_val):
         supabase = self.supabase_controller.get_supabase_client()
-        userjwt_id = self.supabase_controller.GetUserIdFromjwt(jwt_token)
         #event = supabase.table('event').select('id').eq('id' , event_id).execute()
         supabase.table('valoration_event').insert({'event_id' : event_id, 'score' : nota, 'description_valoration' : description_val, 'auth_user_id' : userjwt_id}).execute()
 
@@ -237,18 +251,22 @@ class PlanController:
         return eventos_filtrados
 
 
-    def filter_events_by_criteria(event_ids, events, target_date, max_price):
+    def filter_events_by_criteria(self,event_ids, events, target_date, max_price,valorados):
         filtered_events = []
         for event_id in event_ids:
             for event in events:
-                if event['id'] == event_id:
-                    print(f"Checking event {event_id}:")
-                    if event['start_date'] <= target_date <= event['finish_date'] and (event['price'] is None or event['price'] <= max_price):
-                        print(f"Event {event_id} meets criteria and added to filtered events.")
-                        filtered_events.append(event)
-                    else:
-                        print(f"Event {event_id} does not meet criteria and is skipped.")
-                    break  # Salir del bucle interno una vez que se encuentra el evento
+                if event['id'] not in valorados:
+                    if event['id'] == event_id:
+                        start_date = event['start_date']
+                        finish_date = event['finish_date']
+                        #print(f"Checking event {event_id}:")
+                        if start_date <= target_date <= finish_date and (event['price'] is None or (event['price']) <= max_price):
+                            #print(f"Event {event_id} meets criteria and added to filtered events.")
+                            filtered_events.append(event)
+                        #else:
+                            #print(f"Event {event_id} does not meet criteria and is skipped.")
+
+                        #break  # Salir del bucle interno una vez que se encuentra el evento
         return filtered_events
     
 
@@ -262,7 +280,7 @@ class PlanController:
         return filtered_events
     
 
-    def calcular_distancia_osm(lat1, lon1, lat2, lon2):
+    def calcular_distancia_osm(self,lat1, lon1, lat2, lon2):
         """
         Calcula la distancia en kilómetros entre dos puntos
         utilizando OpenStreetMap y la biblioteca geopy.

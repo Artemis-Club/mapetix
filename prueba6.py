@@ -49,18 +49,25 @@ def filtrarEventosPorDistancia(self, events, ubicacion, max_distance):
 
 
 
-def filter_events_by_criteria(event_ids, events, target_date, max_price):
+def filter_events_by_criteria(event_ids, events, target_date, max_price,valorados):
         filtered_events = []
         for event_id in event_ids:
             for event in events:
-                if event['id'] == event_id:
-                    #print(f"Checking event {event_id}:")
-                    if event['start_date'] <= target_date <= event['finish_date'] and (event['price'] is None or event['price'] <= max_price):
-                        #print(f"Event {event_id} meets criteria and added to filtered events.")
-                        filtered_events.append(event)
-                    #else:
-                        #print(f"Event {event_id} does not meet criteria and is skipped.")
-                    break  # Salir del bucle interno una vez que se encuentra el evento
+                if event['id'] not in valorados:
+                    if event['id'] == event_id:
+                        #print(f"Checking event {event_id}:")
+                        if event['start_date'] <= target_date <= event['finish_date'] and (event['price'] is None or event['price'] <= max_price):
+                            print(f"Event {event_id} meets criteria and added to filtered events.")
+                            print(event['start_date'])
+                            print(event['finish_date'])
+                            print(target_date)
+                            filtered_events.append(event)
+                        else:
+                            print(f"Event {event_id} does not meet criteria and is skipped.")
+                            print(event['start_date'])
+                            print(event['finish_date'])
+                            print(target_date)
+                        break  # Salir del bucle interno una vez que se encuentra el evento
         return filtered_events
     
 
@@ -88,6 +95,21 @@ def calcular_distancia_osm(lat1, lon1, lat2, lon2):
     return distancia
 
 
+def get_events_by_user():
+    supabase = supabase_controller.get_supabase_client()
+    userjwt_id = '0377f09b-7107-4989-aa74-87d86fd5c799'
+    # Obtener los event_ids asociados al plan_id
+    plan_events = supabase.table('valoration_event').select('event_id').eq('auth_user_id', userjwt_id).execute()
+    lista = []
+    plan_events = supabase_controller.processresponseNoDF(plan_events)
+    for plan in plan_events:
+        id = plan['event_id']
+        lista.append(id)
+    return lista  
+
+
+print(get_events_by_user())
+
 prueba = calcular_distancia_osm(39.480609,-0.3589077,39.470019,-0.337169)
 #print(prueba)
 
@@ -101,9 +123,11 @@ eventosjson = supabase_controller.processresponseNoDF(eventos)
 #print(eventosjson)
 
 target_date = '2024-04-23'
+print(target_date)
 target_price = 3
 
-eventos_filtrados = filter_events_by_criteria(eventos_ordenados,eventosjson,target_date,target_price)
+valorados = get_events_by_user()
+eventos_filtrados = filter_events_by_criteria(eventos_ordenados,eventosjson,target_date,target_price,valorados)
 #print(eventos_filtrados)
 #print('Los eventos filtrados son : ')
 eventos2 =[]

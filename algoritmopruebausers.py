@@ -1,8 +1,4 @@
-import os
-from supabase import create_client, Client
 import pandas as pd
-import json
-from dotenv import load_dotenv
 from controllers.supabase_controller import SupabaseController
 import pandas as pd
 import numpy as np
@@ -10,7 +6,6 @@ import numpy as np
 class Algoritmo:
     def __init__(self):
         self.supabase_controller = SupabaseController()
-        load_dotenv()
 
     def get_events(self):
         events = self.supabase_controller.get_events()
