@@ -91,6 +91,7 @@ class PlanView:
             # Obtener el token JWT de la solicitud (suponiendo que está en el encabezado Authorization)
             jwt_token = request.headers.get('Authorization')
             user_location = request.args.get('userLocation')
+            user_location = tuple(map(float, user_location.split(',')))
             #print(user_location)
             max_distance = request.args.get('maxDistance')
             max_distance = int(max_distance)

@@ -56,21 +56,24 @@ class PlanController:
         events_valored = self.get_events_by_user(userid)
         #print(events_valored)
         events = self.filter_events_by_criteria(events,allevents,target_date,max_price,events_valored)
+        #print(events)
+        #filtrar los eventos segun el radio pasado por el front
+        events = self.filter_events_by_distance(events, ubicacion, max_distance)
         eventos2 =[]
         for event in events:
             eventos2.append(event['id'])
         print(eventos2)
-        #print(events)
-        #filtrar los eventos segun el radio pasado por el front
-        events = self.filter_events_by_distance(events, ubicacion, max_distance)
-        print(events)
+
+
         treseventos = events[:3]
+        #print(treseventos)
 
         if not treseventos:
             raise Exception("No se encontraron eventos que cumplan los criterios para crear el plan")
 
-        created_at = datetime.now().timestamp()
-        total_price = sum(evento['price'] for evento in treseventos)
+        created_at = created_at = datetime.now().isoformat()
+
+        total_price = sum(evento['price'] for evento in treseventos if evento['price'] is not None)
         # Extrae las direcciones de inicio y fin
         start_direction = treseventos[0]['direccion_event'] if treseventos else None
         finish_direction = treseventos[-1]['direccion_event'] if treseventos else None
@@ -83,10 +86,9 @@ class PlanController:
             'total_price': total_price,
             'user_id': userid
         }
+        #print(plan)
 
         response = supabase.table('plan').insert(plan).execute()
-        if response.error:
-            print("Error al crear el plan",response.error)
         formatResponse = self.processresponseNoDF(response)
         for plan in formatResponse:
             plan_id = plan['plan_id']
@@ -97,12 +99,10 @@ class PlanController:
                 'event_id' : evento['id']
             }
             response = supabase.table('plan_event').insert(plan_event).execute()
-            if response.error:
-                print("Error al insertar evento en plan_event:", response.error)
 
-        for pla in plan:
-            pla['eventos'] = treseventos
-
+        #for pla in plan:
+        #    pla['eventos'] = treseventos
+        plan['eventos'] = treseventos
         return plan
 
 

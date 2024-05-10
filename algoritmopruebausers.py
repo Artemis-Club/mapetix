@@ -145,7 +145,7 @@ class Algoritmo:
             if event_id not in event_scores_dict:
                 event_scores_dict[event_id] = 0.
                 
-        print(event_scores_dict)
+        #print(event_scores_dict)
 
 
         sorted_event_scores = sorted(event_scores_dict.items(), key=lambda x: x[1], reverse=True)
