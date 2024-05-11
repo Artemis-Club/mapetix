@@ -12,15 +12,9 @@ class PlanView:
     @plan_view.route('/plans', methods=['GET'])
     @require_authentication  # Aplicar el middleware de autenticación
     def get_plans():
-        # Obtener el token JWT de la solicitud (suponiendo que está en el encabezado Authorization)
         jwt_token = request.headers.get('Authorization')
-        #session = supabase_controller.Prueba()
-        #print('la sesion es')
-        #print(session)
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
-        #print(userjwt_id)
         if userjwt_id:
-            # Si el ID de usuario existe, obtener los planes del usuario utilizando el controlador de planes
             plans = plan_controller.get_plans_by_user(userjwt_id)
             return jsonify(plans)
         else:
@@ -50,15 +44,9 @@ class PlanView:
     @plan_view.route('/allevents', methods=['GET'])
     @require_authentication  # Aplicar el middleware de autenticación
     def get_all_events():
-        # Obtener el token JWT de la solicitud (suponiendo que está en el encabezado Authorization)
         jwt_token = request.headers.get('Authorization')
-        #session = supabase_controller.Prueba()
-        #print('la sesion es')
-        #print(session)
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
-        #print(userjwt_id)
         if userjwt_id:
-            # Si el ID de usuario existe, obtener los planes del usuario utilizando el controlador de planes
             allevents = supabase_controller.get_events()
             allevents = supabase_controller.processresponseNoDF(allevents)
             return jsonify(allevents)
@@ -98,7 +86,7 @@ class PlanView:
                 target_date = request.args.get('TargetDate')
                 max_price = request.args.get('maxPrice')
                 max_price = int(max_price)
-                plans = plan_controller.create_plan2(userjwt_id,user_location,max_distance,target_date,max_price)
+                plans = plan_controller.create_plan(userjwt_id,user_location,max_distance,target_date,max_price)
                 return jsonify(plans)
             else:
                 # Si el ID de usuario no existe, devolver un mensaje de error

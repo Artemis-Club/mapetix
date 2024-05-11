@@ -47,7 +47,9 @@ class PlanController:
             plan['events'] = eventos
         return plans_json 
     
-    def create_plan2(self,userid,ubicacion,max_distance,target_date,max_price):
+
+
+    def create_plan(self,userid,ubicacion,max_distance,target_date,max_price):
         supabase = self.supabase_controller.get_supabase_client()
         #obtener los eventos para el usuario
         events = self.algoritmo_controller.recommend_events_for_user(userid)
@@ -107,72 +109,16 @@ class PlanController:
 
 
 
-
-
-    def create_plan(self,jwt_token,ubicacion,max_distance,target_date,max_price):
-        supabase = self.supabase_controller.get_supabase_client()
-
-        #obtener los eventos para el usuario
-        events = self.algoritmo_controller.recommend_events_for_user(jwt_token)
-        allevents = self.supabase_controller.get_events()
-        allevents = self.processresponseNoDF(allevents)
-        events = self.filter_events_by_criteria(events,allevents,target_date,max_price)
-        #filtrar los eventos segun el radio pasado por el front
-        events = self.filter_events_by_distance(events, ubicacion, max_distance)
-        
-        #crear un objeto plan en supabase y meter los eventos en plan_event
-        created_at = datetime.datetime.now()
-        for i in range(0, len(events), 3):
-            # Extrae un subconjunto de tres eventos si es posible
-            grupo_eventos = events[i:i+3]
-
-            # Si el grupo no tiene 3 eventos, se detiene el bucle
-            if len(grupo_eventos) < 3:
-                break 
-
-            # Calcula el precio total para el grupo de eventos actual
-            total_price = sum(evento['price'] for evento in grupo_eventos)
-             # Extrae las direcciones de inicio y fin
-            start_direction = grupo_eventos[0]['direction'] if grupo_eventos else None
-            finish_direction = grupo_eventos[-1]['direction'] if grupo_eventos else None
-            plan = {
-                'created_at': created_at,
-                'description': 'Descripción del plan',  # Aquí puedes agregar una descripción relevante
-                'start_date': target_date,
-                'finish_date': target_date,
-                'start_direction': start_direction,
-                'finish_direction': finish_direction,
-                'total_price': total_price,
-                'user_id': jwt_token
-            }
-            response = self.supabase_controller.table('plan').insert(plan).execute()
-            if response.error:
-                print("Error al crear el plan",response.error)
-                continue
-            formatResponse = self.processresponseNoDF(response)
-            for plan in formatResponse:
-                plan_id = plan['plan_id']
-
-            for evento in grupo_eventos:
-                plan_event = {
-                    'plan_id': plan_id,
-                    'event_id' : evento['id']
-                }
-                response = supabase.table('plan_event').insert(plan_event).execute()
-                if response.error:
-                    print("Error al insertar evento en plan_event:", response.error)
-
-
-    def valorate_events(self,event_id,userjwt_id,nota,description_val):
-        supabase = self.supabase_controller.get_supabase_client()
-        #event = supabase.table('event').select('id').eq('id' , event_id).execute()
-        supabase.table('valoration_event').insert({'event_id' : event_id, 'score' : nota, 'description_valoration' : description_val, 'auth_user_id' : userjwt_id}).execute()
-
-    
-
-
-    # POST - /plan      Crea un plan para un usario (JWT)
-
+    def valorate_event(self,event_id,userjwt_id,nota,description_val):
+        supabase = self.supabase_controller.get_supabase_client() 
+        existe = supabase.table('valoration_event').select('*').eq('event_id', event_id).eq('auth_user_id', userjwt_id).execute()
+        existe = self.supabase_controller.processresponseNoDF(existe)
+        if existe:
+            print('hola')
+            devuelve = supabase.table('valoration_event').update({'score': nota}).eq('event_id', event_id).eq('auth_user_id', userjwt_id).execute()
+        else:
+            devuelve = supabase.table('valoration_event').insert({'event_id' : event_id, 'score' : nota, 'description_valoration' : description_val, 'auth_user_id' : userjwt_id}).execute()
+        return self.supabase_controller.processresponseNoDF(devuelve)
 
     ### PUT - /plan/:id   Modifica el plan de un usuario (id = plan_id)
     def modify_plan(self,plan):
@@ -300,8 +246,5 @@ class PlanController:
         
         return distancia
 
-    def valorate_event(self,event_id,jwt_token,nota,description_val):
-        supabase = self.supabase_controller.get_supabase_client()
-        userjwt_id = self.supabase_controller.GetUserIdFromjwt(jwt_token)
-        supabase.table('valoration_event').insert({'event_id' : event_id, 'score' : nota, 'description_valoration' : description_val, 'auth_user_id' : userjwt_id}).execute()
+    
         
