@@ -60,7 +60,7 @@ class PlanView:
         if userjwt_id:
             # Si el ID de usuario existe, obtener los planes del usuario utilizando el controlador de planes
             allevents = supabase_controller.get_events()
-            allevents = supabase_controller.processresponseNoDF
+            allevents = supabase_controller.processresponseNoDF(allevents)
             return jsonify(allevents)
         else:
             # Si el ID de usuario no existe, devolver un mensaje de error
