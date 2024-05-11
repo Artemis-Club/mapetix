@@ -114,7 +114,6 @@ class PlanController:
         existe = supabase.table('valoration_event').select('*').eq('event_id', event_id).eq('auth_user_id', userjwt_id).execute()
         existe = self.supabase_controller.processresponseNoDF(existe)
         if existe:
-            print('hola')
             devuelve = supabase.table('valoration_event').update({'score': nota}).eq('event_id', event_id).eq('auth_user_id', userjwt_id).execute()
         else:
             devuelve = supabase.table('valoration_event').insert({'event_id' : event_id, 'score' : nota, 'description_valoration' : description_val, 'auth_user_id' : userjwt_id}).execute()
