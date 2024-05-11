@@ -1,8 +1,8 @@
-import { Button, Text } from '@/components';
+import { Text } from '@/components';
 import { Link } from 'expo-router';
 import { Icon } from '@/components/ui/atoms/Icon';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
+import { BoxComponent } from '@/components';
 
 export default function Auth() {
   return (
@@ -21,11 +21,12 @@ export default function Auth() {
           Crear cuenta
         </Link>
       </View>
-      <View className="flex-row justify-center justify-items-center ml-10 mr-10">
-        <Text style={'text-center'}>
+      <View className="flex: 1 justifyContent: 'center' alignItems: 'center'">
+        <BoxComponent>
+          {' '}
           Muchas gracias por confiar en Mapetix hacemos todo lo posible por
           recomendar los mejores planazos para disfrutar de nuestro tiempo libre
-        </Text>
+        </BoxComponent>
       </View>
       <View className="flex-row justify-end mr-8">
         <Icon name="check-all"></Icon>
