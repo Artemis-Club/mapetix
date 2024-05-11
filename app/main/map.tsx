@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { MapWithMarkers, Modal, PlanCardSwiper } from '@/components';
 import { mapSettings } from '@/config/map';
 import { useGetPlanDetailsQuery } from '@/api/plan';
