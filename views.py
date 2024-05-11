@@ -33,6 +33,7 @@ class PlanView:
         #    return jsonify({'error':'No user location provided'}),400
         if userjwt_id:
             user_location = request.args.get('userLocation')
+            user_location = tuple(map(float, user_location.split(',')))
             plan =  plan_controller.get_plan(id,user_location)
             return jsonify(plan)
         else:
@@ -42,7 +43,7 @@ class PlanView:
 
 
     @plan_view.route('/allevents', methods=['GET'])
-    @require_authentication  # Aplicar el middleware de autenticación
+    @require_authentication
     def get_all_events():
         jwt_token = request.headers.get('Authorization')
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)

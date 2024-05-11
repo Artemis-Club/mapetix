@@ -10,7 +10,7 @@ class PlanController:
         self.supabase_controller = SupabaseController()
         self.algoritmo_controller = Algoritmo()
 
-    # GET - /plans      Obtiene los planes ya hecho por el usuario (JWT)
+    # GET - /plans      Obtiene los planes ya hecho por el usuario con sus eventos(JWT)
     def get_plans_by_user(self, userjwt_id):
         supabase = self.supabase_controller.get_supabase_client()
         plans_by_user = supabase.table('plan').select('*').eq('user_id', userjwt_id).execute()
@@ -19,19 +19,8 @@ class PlanController:
             plan_id = plan['plan_id']
             plan['events'] = self.get_events_for_plan(plan_id)
         return plans_json    
-    
-    def get_events_by_user(self,userjwt_id):
-        supabase = self.supabase_controller.get_supabase_client()
-        # Obtener los event_ids asociados al plan_id
-        plan_events = supabase.table('valoration_event').select('event_id').eq('auth_user_id', userjwt_id).execute()
-        lista = []
-        plan_events = self.supabase_controller.processresponseNoDF(plan_events)
-        for plan in plan_events:
-            id = plan['event_id']
-            lista.append(id)
-        return lista 
 
-     # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
+     # GET - /plan/:id   Devuelve un plan concreto de un usuario con sus eventos (id = plan_id)
     def get_plan(self,id,userLocation):
         supabase = self.supabase_controller.get_supabase_client()
         #obtener el plan
@@ -40,15 +29,17 @@ class PlanController:
         for plan in plans_json:
             plan_id = plan['plan_id']
             eventos = self.get_events_for_plan(plan_id)
-            for evento in eventos:
-                event_location = (evento['coord_x'], evento['coord_y'])
-                distance = self.calcular_distancia_osm(userLocation[0], userLocation[1], event_location[0], event_location[1])
-                evento['distance'] = distance
+            #print(eventos)
+            for evento_1 in eventos:
+                for evento in evento_1:
+                    event_location = (evento['coord_x'], evento['coord_y'])
+                    distance = self.calcular_distancia_osm(userLocation[0], userLocation[1], event_location[0], event_location[1])
+                    evento['distance'] = distance
             plan['events'] = eventos
         return plans_json 
     
 
-
+    #crea un plan para el usuario con los parametros indicados
     def create_plan(self,userid,ubicacion,max_distance,target_date,max_price):
         supabase = self.supabase_controller.get_supabase_client()
         #obtener los eventos para el usuario
@@ -108,7 +99,7 @@ class PlanController:
         return plan
 
 
-
+    #valora un evento
     def valorate_event(self,event_id,userjwt_id,nota,description_val):
         supabase = self.supabase_controller.get_supabase_client() 
         existe = supabase.table('valoration_event').select('*').eq('event_id', event_id).eq('auth_user_id', userjwt_id).execute()
@@ -146,11 +137,19 @@ class PlanController:
         except Exception as e:
             print("Error:", e)
 
-
+    def get_events_by_user(self,userjwt_id):
+        supabase = self.supabase_controller.get_supabase_client()
+        # Obtener los event_ids asociados al plan_id
+        plan_events = supabase.table('valoration_event').select('event_id').eq('auth_user_id', userjwt_id).execute()
+        lista = []
+        plan_events = self.supabase_controller.processresponseNoDF(plan_events)
+        for plan in plan_events:
+            id = plan['event_id']
+            lista.append(id)
+        return lista
 
     def get_events_for_plan(self, plan_id):
         supabase = self.supabase_controller.get_supabase_client()
-
         # Obtener los event_ids asociados al plan_id
         plan_events = supabase.table('plan_event').select('event_id').eq('plan_id', plan_id).execute()
         plan_events = self.processresponseNoDF(plan_events)
@@ -160,6 +159,10 @@ class PlanController:
         for event_id in event_ids:
             event_details = supabase.table('event').select('*').eq('id', event_id).execute()
             formatted_event = self.processresponseNoDF(event_details)
+            for evento in formatted_event:
+                evento_id = evento['id']
+                evento['valoration'] = self.event_score(evento_id)
+            #print(formatted_event)
             if formatted_event:
                 formatted_events.append(formatted_event)
 
@@ -226,16 +229,6 @@ class PlanController:
     
 
     def calcular_distancia_osm(self,lat1, lon1, lat2, lon2):
-        """
-        Calcula la distancia en kilómetros entre dos puntos
-        utilizando OpenStreetMap y la biblioteca geopy.
-        
-        :param lat1: Latitud del primer punto en grados decimales
-        :param lon1: Longitud del primer punto en grados decimales
-        :param lat2: Latitud del segundo punto en grados decimales
-        :param lon2: Longitud del segundo punto en grados decimales
-        :return: Distancia entre los dos puntos en kilómetros
-        """
         # Coordenadas de los puntos
         punto1 = (lat1, lon1)
         punto2 = (lat2, lon2)
@@ -244,6 +237,21 @@ class PlanController:
         distancia = geodesic(punto1, punto2).kilometers
         
         return distancia
+    
+    #obtiene la valoracion de un evento calculando la media de sus valoraciones por los usuarios
+    def event_score(self,event_id):
+        supabase = self.supabase_controller.get_supabase_client()
+        valoraciones = supabase.table('valoration_event').select('*').eq('event_id', event_id).execute()
+        valoraciones = self.supabase_controller.processresponseNoDF(valoraciones)
+        #print(valoraciones)
+        num_valoraciones = len(valoraciones)
+        if num_valoraciones == 0:
+            return 0
+        suma_scores = sum(evento['score'] for evento in valoraciones)
+        media_score = suma_scores / num_valoraciones
+        return media_score
+    
 
+    
     
         
