@@ -35,10 +35,10 @@ class PlanView:
     def get_plan(id):
         jwt_token = request.headers.get('Authorization')
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
-        user_location = request.args.get('userLocation')
         #if not user_location:
         #    return jsonify({'error':'No user location provided'}),400
         if userjwt_id:
+            user_location = request.args.get('userLocation')
             plan =  plan_controller.get_plan(id,user_location)
             return jsonify(plan)
         else:
@@ -72,11 +72,9 @@ class PlanView:
     def rate_event(id):
         jwt_token = request.headers.get('Authorization')
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
-        nota = request.args.get('Nota')
-        description_val = request.args.get('Description')
-        #if not user_location:
-        #    return jsonify({'error':'No user location provided'}),400
         if userjwt_id:
+            nota = request.args.get('Nota')
+            description_val = request.args.get('Description')
             plan =  plan_controller.valorate_event(id,userjwt_id,nota,description_val)
             return jsonify(plan)
         else:
@@ -90,24 +88,16 @@ class PlanView:
         try:
             # Obtener el token JWT de la solicitud (suponiendo que está en el encabezado Authorization)
             jwt_token = request.headers.get('Authorization')
-            user_location = request.args.get('userLocation')
-            user_location = tuple(map(float, user_location.split(',')))
-            #print(user_location)
-            max_distance = request.args.get('maxDistance')
-            max_distance = int(max_distance)
-            #print(max_distance)
-            target_date = request.args.get('TargetDate')
-            #print(target_date)
-
-            max_price = request.args.get('maxPrice')
-            max_price = int(max_price)
-            #print(max_price)
-            #session = supabase_controller.Prueba()
-            #print('la sesion es')
-            #print(session)
-            userjwt_id = '0377f09b-7107-4989-aa74-87d86fd5c799'
+            userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
             #print(userjwt_id)
             if userjwt_id:
+                user_location = request.args.get('userLocation')
+                user_location = tuple(map(float, user_location.split(',')))
+                max_distance = request.args.get('maxDistance')
+                max_distance = int(max_distance)
+                target_date = request.args.get('TargetDate')
+                max_price = request.args.get('maxPrice')
+                max_price = int(max_price)
                 plans = plan_controller.create_plan2(userjwt_id,user_location,max_distance,target_date,max_price)
                 return jsonify(plans)
             else:
