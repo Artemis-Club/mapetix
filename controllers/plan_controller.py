@@ -251,6 +251,11 @@ class PlanController:
         media_score = suma_scores / num_valoraciones
         return media_score
     
+    def get_event_by_id(self,event_id):
+        supabase = self.supabase_controller.get_supabase_client()
+        eventos = supabase.table('event').select('*').eq('id', event_id).execute()
+        eventos = self.supabase_controller.processresponseNoDF(eventos)
+        return eventos
 
     
     

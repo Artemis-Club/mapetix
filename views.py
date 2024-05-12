@@ -83,7 +83,7 @@ class PlanView:
                 user_location = request.args.get('userLocation')
                 user_location = tuple(map(float, user_location.split(',')))
                 max_distance = request.args.get('maxDistance')
-                max_distance = int(max_distance)
+                max_distance = float(max_distance)
                 target_date = request.args.get('TargetDate')
                 max_price = request.args.get('maxPrice')
                 max_price = int(max_price)
@@ -96,3 +96,19 @@ class PlanView:
         except Exception as e:
             # Manejar la excepción y devolver un mensaje de error adecuado
             return jsonify({'error': str(e)}), 400
+        
+
+    # GET - /plan/:id   Devuelve un plan concreto de un usuario (id = plan_id)
+    @plan_view.route('/event/<int:id>',methods=['GET'])
+    @require_authentication
+    def get_event(id):
+        jwt_token = request.headers.get('Authorization')
+        userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
+        #if not user_location:
+        #    return jsonify({'error':'No user location provided'}),400
+        if userjwt_id:
+            event =  plan_controller.get_event_by_id(id)
+            return jsonify(event)
+        else:
+            # Si el ID de usuario no existe, devolver un mensaje de error
+            return jsonify({'error': 'Usuario no autorizado'}), 401
