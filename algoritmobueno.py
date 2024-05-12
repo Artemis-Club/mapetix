@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 # Configuración de Supabase
 url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
+key: str = os.environ.get("SUPABASE_KEY2")
 supabase : Client = create_client(url, key)
 
 def get_events():
@@ -215,6 +215,6 @@ def recommend_events_for_user(usuario_id):
 
     return event_ids    
 # Llama a la función con el nombre de usuario deseado
-recommendations = recommend_events_for_user(8)
-print(recommendations)
+#recommendations = recommend_events_for_user(8)
+#print(recommendations)
 

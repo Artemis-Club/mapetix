@@ -8,3 +8,4 @@ unidecode
 Flask
 scikit-learn
 pyjwt
+gunicorn
