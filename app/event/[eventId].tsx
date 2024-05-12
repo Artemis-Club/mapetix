@@ -5,8 +5,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useGetEventDetailQuery } from '@/api/event';
 import Carousel from 'react-native-reanimated-carousel';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
+const rating: number = 5;
 
 export default function EventDetails() {
   const router = useRouter();
@@ -29,6 +31,15 @@ export default function EventDetails() {
     ],
     locationName: 'UV',
     description: 'Ventajas',
+  };
+
+  const [rating, setRating] = useState(0);
+
+  const enviarCalificacion = () => {
+    const ratingDoble = rating === 0 ? 1 : rating * 2;
+    // Aquí deberías enviar 'ratingDoble' a tu API
+    // Por ahora, solo imprimimos el valor en la consola
+    console.log('Calificación enviada:', ratingDoble);
   };
 
   return (
@@ -81,6 +92,7 @@ export default function EventDetails() {
             ratingCount={5}
             imageSize={50}
             tintColor="#262626"
+            onFinishRating={setRating}
           ></Rating>
         </View>
       )) ||
@@ -103,7 +115,9 @@ export default function EventDetails() {
       {(from === 'plan' && (
         <View className="flex-row">
           <View className="w-1/2 flex justify-center items-center">
-            <Button stylish="outline">Valorar</Button>
+            <Button stylish="outline" onPress={enviarCalificacion}>
+              Valorar
+            </Button>
           </View>
           <View className="w-1/2 flex justify-center items-center">
             <Button stylish="fill">Ruta</Button>
