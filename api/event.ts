@@ -1,12 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { authBaseQuery } from '@/utils/http';
+import { authApiQuery } from '@/utils/http';
 
 const eventApi = createApi({
   reducerPath: 'eventApi',
-  baseQuery: authBaseQuery,
+  baseQuery: authApiQuery,
   endpoints: (builder) => ({
     getEvents: builder.query({
-      query: () => 'rest/v1/event',
+      query: () => 'allevents',
     }),
     getEventDetail: builder.query({
       query: (id) => `rest/v1/event?id=eq.${id}`,
@@ -15,5 +15,9 @@ const eventApi = createApi({
   }),
 });
 
-export const { useGetEventsQuery, useGetEventDetailQuery } = eventApi;
+export const {
+  useGetEventsQuery,
+  useGetEventDetailQuery,
+  useLazyGetEventsQuery,
+} = eventApi;
 export default eventApi;

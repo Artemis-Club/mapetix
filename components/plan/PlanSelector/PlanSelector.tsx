@@ -17,6 +17,7 @@ const PlanSelector: React.FC<PlanSelectorProps> = ({
 }) => {
   const { data: plans, error, isLoading } = useGetMyPlansQuery();
 
+  // console.log(plans);
   const renderItem = ({
     item: { description, start_date, total_price, plan_id },
   }: any) => (

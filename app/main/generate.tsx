@@ -36,7 +36,7 @@ const GeneratePlan = ({ navigation }) => {
       // Verifica si la respuesta de la API es válida antes de navegar a la siguiente pantalla
       if (response.ok) {
         // Navega a la siguiente pantalla y pasa los datos recibidos de la API como parámetro
-        navigation.navigate('Screen2', { responseData: data });
+        navigation.navigate('/plans', { responseData: data });
       } else {
         // Muestra una alerta si hay un problema con la respuesta de la API
         Alert.alert(

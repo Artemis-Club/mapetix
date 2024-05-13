@@ -8,6 +8,7 @@ export const mapSettings = {
     longitudeDelta: 0.0421,
   },
   // provider: PROVIDER_GOOGLE, //TEMP
+  showUserLocation: true,
   showsCompass: false,
   customMapStyle: [
     {

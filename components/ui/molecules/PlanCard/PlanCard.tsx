@@ -19,6 +19,7 @@ export interface PlanCardProps {
   gallery: string[];
   locationName: string;
   description: string;
+  valoration: number;
   style?: object;
   className?: string;
   from?: string;
@@ -34,6 +35,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
   gallery,
   locationName,
   description,
+  valoration,
   id,
   style,
   from,
@@ -57,43 +59,57 @@ const PlanCard: React.FC<PlanCardProps> = ({
             <Image source={gallery && gallery[0]} className="h-full" />
           </View>
           <View className="flex-col flex-1 items-start">
-            <Text bold className="text-2xl font-black" numberOfLines={2}>
-              {title}
+            <Text
+              bold
+              className="text-2xl font-black text-start"
+              numberOfLines={2}
+            >
+              {title.trim()}
             </Text>
             <View className="flex flex-row items-center">
               <Icon size={20} name="clock" className="mr-2 text-neutral-400" />
-              <Text className="text-lg text-neutral-400">
-                {hourStart.replace(':00', '')}h - {hourEnd.replace(':00', '')}h
-              </Text>
+              {hourStart && hourEnd && (
+                <Text className="text-lg text-neutral-400">
+                  {hourStart.replace(':00', '')}h - {hourEnd.replace(':00', '')}
+                  h
+                </Text>
+              )}
             </View>
-            <View className="flex flex-row items-center w-full">
-              <Icon
-                size={20}
-                name="map-marker"
-                className="mr-2 text-neutral-500"
-              />
-              <Text bold className="text-neutral-500 font-black text-lg">
-                {locationName}
-              </Text>
-              <Text className="text-neutral-500 text-sm ml-auto">
-                {'a 5min'}
-              </Text>
-            </View>
+            {locationName && (
+              <View className="flex flex-row items-center w-full my-1">
+                <Icon
+                  size={20}
+                  name="map-marker"
+                  className="mr-2 text-neutral-500"
+                />
+                <Text
+                  bold
+                  className="text-neutral-500 font-bold text-md w-full"
+                  numberOfLines={1}
+                >
+                  {locationName}
+                </Text>
+              </View>
+            )}
             <View className="flex flex-row items-center w-full">
               <Icon size={20} name="cash" className="mr-1 text-emerald-500" />
               <View className="bg-emerald-500 px-1 rounded-xl overflow-hidden">
                 <Text bold className="text-neutral-700 text-lg">
-                  {parseFloat(price).toFixed(2)}€
+                  {price ? parseFloat(price).toFixed(2) : '5 - 30'}€
                 </Text>
               </View>
-              <Icon
-                size={20}
-                name="star"
-                className="mx-1 ml-auto text-yellow-500"
-              />
-              <Text bold className="text-yellow-500 text-lg  ">
-                {parseFloat(price).toFixed(1)}
-              </Text>
+              {valoration && (
+                <>
+                  <Icon
+                    size={20}
+                    name="star"
+                    className="mx-1 ml-auto text-yellow-500"
+                  />
+                  <Text bold className="text-yellow-500 text-lg  ">
+                    {(valoration / 2).toFixed(1)}
+                  </Text>
+                </>
+              )}
             </View>
           </View>
         </View>

@@ -17,6 +17,7 @@ export default function DrawerLayout() {
       <Drawer.Screen name="map" options={{ title: 'Mapa' }} />
       <Drawer.Screen name="my-plans" options={{ title: 'Mis planes' }} />
       <Drawer.Screen name="generate" options={{ title: 'Generar Plan' }} />
+      <Drawer.Screen name="logout" options={{ title: 'Cerrar Sesión' }} />
     </Drawer>
   );
 }
