@@ -1,42 +1,58 @@
 import React, { useState } from 'react';
-import { View, TextInput, Alert, Text } from 'react-native';
+import { View, TextInput, Alert, Platform } from 'react-native';
+import { Text } from '@/components';
 import { Button } from '@/components';
+import dayjs from 'dayjs';
+import DateTimePicker, {
+  DateTimePickerAndroid,
+} from '@react-native-community/datetimepicker';
+import { useGeneratePlanMutation } from '@/api/plan';
+import { useRouter } from 'expo-router';
 
-const GeneratePlan = ({ navigation }) => {
-  const [date, setDate] = useState('');
+const GeneratePlan = () => {
+  const router = useRouter();
+  const [date, setDate] = useState(new Date());
   const [errorMessage, setErrorMessage] = useState('');
+  const [generatePlan, {}] = useGeneratePlanMutation();
+
+  const onDatePickerOpen = () => {
+    if (Platform.OS === 'android') {
+      DateTimePickerAndroid.open({
+        minimumDate: new Date(),
+        value: date,
+        onChange: (_, selectedDate) => {
+          setDate(selectedDate || new Date());
+        },
+      });
+    } else {
+    }
+  };
 
   const fetchDataAndNavigate = async () => {
     try {
-      // Verifica si la fecha tiene el formato correcto (YYYY-MM-DD)
-      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-      if (!date.match(dateRegex)) {
-        setErrorMessage(
-          'Por favor, ingrese en formato "YYYY-MM-DD" con guiones'
-        );
-        return;
-      }
-
       // Verifica si la fecha es válida y no es anterior al día actual (sin incluirlo)
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0); // Establece la hora del día actual a las 00:00:00
-      const inputDate = new Date(date);
-      inputDate.setHours(0, 0, 0, 0); // Establece la hora de la fecha ingresada a las 00:00:00
-      if (inputDate < currentDate) {
+      setErrorMessage(null);
+
+      if (dayjs(date).isBefore(dayjs(), 'day')) {
         setErrorMessage('Por favor, ponga una fecha actual o a futuro');
         return;
       }
 
+      const response = await generatePlan({
+        date: dayjs(date).format('YYYY-MM-DD'),
+      });
+
+      console.log(response);
       // Realiza una llamada a la API con la fecha proporcionada por el usuario
-      const response = await fetch(
-        `https://ejemplo-api.com/endpoint?fecha=${date}`
-      );
-      const data = await response.json();
+      // const response = await fetch(
+      //   `https://ejemplo-api.com/endpoint?fecha=${date}`
+      // );
+      // const data = await response.json();
 
       // Verifica si la respuesta de la API es válida antes de navegar a la siguiente pantalla
-      if (response.ok) {
+      if (response.data) {
         // Navega a la siguiente pantalla y pasa los datos recibidos de la API como parámetro
-        navigation.navigate('/plans', { responseData: data });
+        router.push('/main/my-plans');
       } else {
         // Muestra una alerta si hay un problema con la respuesta de la API
         Alert.alert(
@@ -55,43 +71,35 @@ const GeneratePlan = ({ navigation }) => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#262626',
-      }}
-    >
-      <Text style={{ color: 'white', marginBottom: 10 }}>
-        Diga para qué día quiere el plan:
+    <View className="flex-1 justify-center items-center bg-neutral-800 px-4">
+      <Text bold style={{ color: 'white', marginBottom: 10 }}>
+        ¿Para qué dia?
       </Text>
-      <TextInput
-        style={{
-          height: 40,
-          width: 200,
-          borderColor: 'gray',
-          borderWidth: 1,
-          marginBottom: 20,
-          paddingHorizontal: 10,
-          color: 'white',
-          textAlign: 'center',
-          borderRadius: 10,
-        }}
-        placeholder="Año-Mes-Día"
-        placeholderTextColor="white"
-        value={date}
-        onChangeText={(text) => {
-          setDate(text);
-          setErrorMessage('');
-        }}
-      />
+      {Platform.OS === 'android' && (
+        <Button onPress={onDatePickerOpen} stylish="outline" block={false}>
+          {date.toLocaleDateString()}
+        </Button>
+      )}
+      {Platform.OS === 'ios' && (
+        <DateTimePicker
+          display="calendar"
+          mode="date"
+          value={date}
+          onChange={(_, date) => setDate(date || new Date())}
+        />
+      )}
+
       {errorMessage ? (
         <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>
           {errorMessage}
         </Text>
       ) : null}
-      <Button onPress={fetchDataAndNavigate} stylish="outline">
+      <Button
+        onPress={fetchDataAndNavigate}
+        stylish="fill"
+        className="mx-auto mt-4"
+        block={false}
+      >
         Generar Plan
       </Button>
     </View>
