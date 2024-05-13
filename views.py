@@ -48,7 +48,7 @@ class PlanView:
         jwt_token = request.headers.get('Authorization')
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
         if userjwt_id:
-            allevents = supabase_controller.get_events()
+            allevents = supabase_controller.get_today_events()
             allevents = supabase_controller.processresponseNoDF(allevents)
             return jsonify(allevents)
         else:
