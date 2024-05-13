@@ -221,7 +221,7 @@ class PlanController:
                         #break  # Salir del bucle interno una vez que se encuentra el evento
         return filtered_events
     
-    def filter_events_by_date(self,target_date,):
+    def filter_events_by_date(self,target_date):
         events = self.supabase_controller.get_events()
         events = self.supabase_controller.processresponseNoDF(events)
         filtered_events = []

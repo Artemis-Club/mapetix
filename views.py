@@ -50,7 +50,7 @@ class PlanView:
         jwt_token = request.headers.get('Authorization')
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
         if userjwt_id:
-            target_date = request.args.get('TargetDate')
+            target_date = datetime.today().strftime('%Y-%m-%d')
             allevents = plan_controller.filter_events_by_date(target_date)
             return jsonify(allevents)
         else:
