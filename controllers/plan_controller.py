@@ -230,6 +230,8 @@ class PlanController:
             finish_date = event['finish_date']
             #print(f"Checking event {event_id}:")
             if start_date <= target_date <= finish_date:
+                evento_id = event['id']
+                event['valoration'] = self.event_score(evento_id)
                 filtered_events.append(event)
         return filtered_events
     
@@ -271,6 +273,9 @@ class PlanController:
         supabase = self.supabase_controller.get_supabase_client()
         eventos = supabase.table('event').select('*').eq('id', event_id).execute()
         eventos = self.supabase_controller.processresponseNoDF(eventos)
+        for event in eventos:
+            evento_id = event['id']
+            event['valoration'] = self.event_score(evento_id)
         return eventos
     
     def events_rated_by_user(self,userid):
