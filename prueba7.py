@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import json
 from algoritmopruebausers import Algoritmo
 from controllers.supabase_controller import SupabaseController
+import random
 
 algoritmo_controller = Algoritmo()
 supabase_controller = SupabaseController()
@@ -23,4 +24,23 @@ def event_score(event_id):
         media_score = suma_scores / num_valoraciones
         return media_score
 
-print(event_score(3))
+def events_rated_by_user(userid):
+        supabase = supabase_controller.get_supabase_client()
+        eventos = supabase.table('valoration_event').select('event_id').eq('auth_user_id' , userid).execute()
+        eventos = supabase_controller.processresponseNoDF(eventos)
+        return eventos
+
+
+def get_events():
+    supabase = supabase_controller.get_supabase_client()
+    events = supabase.table('event').select('*').execute()
+    return events
+
+events = get_events()
+events = supabase_controller.processresponseNoDF(events)
+random.shuffle(events)
+lista = []
+for event in events:
+    id = event['id']
+    lista.append(id)
+print(lista)

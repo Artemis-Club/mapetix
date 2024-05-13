@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from algoritmopruebausers import Algoritmo
 from geopy.distance import geodesic
+import random
 
 class PlanController:
     def __init__(self):
@@ -43,7 +44,11 @@ class PlanController:
     def create_plan(self,userid,ubicacion,max_distance,target_date,max_price):
         supabase = self.supabase_controller.get_supabase_client()
         #obtener los eventos para el usuario
-        events = self.algoritmo_controller.recommend_events_for_user(userid)
+        ev = self.events_rated_by_user(userid)
+        if ev:
+            events = self.algoritmo_controller.recommend_events_for_user(userid)
+        else:
+            events = self.random_events()
         allevents = self.supabase_controller.get_events()
         allevents = self.processresponseNoDF(allevents)
         events_valored = self.get_events_by_user(userid)
@@ -139,7 +144,6 @@ class PlanController:
 
     def get_events_by_user(self,userjwt_id):
         supabase = self.supabase_controller.get_supabase_client()
-        # Obtener los event_ids asociados al plan_id
         plan_events = supabase.table('valoration_event').select('event_id').eq('auth_user_id', userjwt_id).execute()
         lista = []
         plan_events = self.supabase_controller.processresponseNoDF(plan_events)
@@ -256,6 +260,22 @@ class PlanController:
         eventos = supabase.table('event').select('*').eq('id', event_id).execute()
         eventos = self.supabase_controller.processresponseNoDF(eventos)
         return eventos
+    
+    def events_rated_by_user(self,userid):
+        supabase = self.supabase_controller.get_supabase_client()
+        eventos = supabase.table('valoration_event').select('*').eq('auth_user_id' , userid).execute()
+        eventos = self.supabase_controller.processresponseNoDF(eventos)
+        return eventos
+    
+    def random_events(self):
+        events = self.supabase_controller.get_events2()
+        events = self.supabase_controller.processresponseNoDF(events)
+        random.shuffle(events)
+        lista = []
+        for event in events:
+            id = event['id']
+            lista.append(id)
+        return lista
 
     
     

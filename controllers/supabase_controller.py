@@ -68,6 +68,11 @@ class SupabaseController:
         events = supabase.table('event').select('*').order('id', desc=False).execute()
         return events
     
+    def get_events2(self):
+        supabase = self.get_supabase_client()
+        events = supabase.table('event').select('*').execute()
+        return events
+    
     def get_users(self):
         supabase = self.get_supabase_client()
         profiles = supabase.table('user').select('*').order('id', desc=False).execute()
