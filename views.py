@@ -2,11 +2,13 @@ from flask import Blueprint, jsonify, request
 from controllers.plan_controller import PlanController
 from auth_middleware import require_authentication
 from controllers.supabase_controller import SupabaseController
+from scrapbucket2 import Scrap
 from datetime import datetime
 
 plan_view = Blueprint('plan-view', __name__)
 plan_controller = PlanController()
 supabase_controller = SupabaseController()
+scrap_controller = Scrap()
 
 class PlanView:
     @plan_view.route('/plans', methods=['GET'])
@@ -112,3 +114,13 @@ class PlanView:
         else:
             # Si el ID de usuario no existe, devolver un mensaje de error
             return jsonify({'error': 'Usuario no autorizado'}), 401
+        
+
+    @plan_view.route('/scrap',methods=['POST'])
+    def do_scrap():
+        try:
+            scrap_controller.hacerscrap()
+            return jsonify({'mensaje': 'El scrap ejecutó correctamente.'}), 200
+        except Exception as e:
+            # Manejar la excepción y devolver un mensaje de error adecuado
+            return jsonify({'error': str(e)}), 500

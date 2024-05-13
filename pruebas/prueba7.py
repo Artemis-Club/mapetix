@@ -5,10 +5,12 @@ from dotenv import load_dotenv
 import json
 from algoritmopruebausers import Algoritmo
 from controllers.supabase_controller import SupabaseController
+from scrapbucket2 import Scrap
 import random
 
 algoritmo_controller = Algoritmo()
 supabase_controller = SupabaseController()
+scrap_controller = Scrap()
 
 
 
@@ -36,13 +38,7 @@ def get_events():
     events = supabase.table('event').select('*').order('id',desc=True).execute()
     return events
 
-events = get_events()
-events = supabase_controller.processresponseNoDF(events)
-lista=[]
-for e in events:
-    id = e['id']
-    lista.append(id)
-print(lista)
+
 def filter_events_by_date(events, target_date,):
         filtered_events = []
         for event in events:
@@ -52,11 +48,4 @@ def filter_events_by_date(events, target_date,):
             if start_date <= target_date <= finish_date:
                 filtered_events.append(event)
         return filtered_events
-
-
-ev = filter_events_by_date(events, '2024-05-31')
-lista=[]
-for e in ev:
-    id = e['id']
-    lista.append(id)
-print(lista)
+scrap = scrap_controller.hacerscrap()
