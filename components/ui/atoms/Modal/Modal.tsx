@@ -30,7 +30,7 @@ const Modal: React.FC<ModalProps> = ({ open = false, children, onClose }) => {
                 className="absolute -z-10 bg-black w-full h-full opacity-40"
                 onPress={onClose}
               />
-              <View className="absolute z-10 w-full p-8">{children}</View>
+              <View className="z-10 w-full my-auto p-8">{children}</View>
             </Animated.View>
           )}
         </RNModal>
