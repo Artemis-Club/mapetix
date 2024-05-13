@@ -264,7 +264,7 @@ class PlanController:
         #print(valoraciones)
         num_valoraciones = len(valoraciones)
         if num_valoraciones == 0:
-            return 0
+            return None
         suma_scores = sum(evento['score'] for evento in valoraciones)
         media_score = suma_scores / num_valoraciones
         return media_score
