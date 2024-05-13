@@ -20,6 +20,7 @@ export default function PlanDetails() {
       ...event,
       time: event.start_hour && event.start_hour.slice(0, 5),
       title: event.event_name,
+      description: event.description.slice(0, 70) + '...',
     }));
 
   console.log(location);

@@ -9,7 +9,7 @@ const eventApi = createApi({
       query: () => 'allevents',
     }),
     getEventDetail: builder.query({
-      query: (id) => `rest/v1/event?id=eq.${id}`,
+      query: (id) => `event/${id}`,
       transformResponse: (response) => response[0],
     }),
   }),

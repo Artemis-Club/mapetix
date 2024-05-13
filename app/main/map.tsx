@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { MapWithMarkers, Modal, PlanCardSwiper } from '@/components';
+import { MapWithMarkers, Modal, PlanCardSwiper, Text } from '@/components';
 import { mapSettings } from '@/config/map';
 import { PlanSelector } from '@/components/plan';
 import { useEffect, useState } from 'react';
@@ -109,9 +109,12 @@ export default function Map() {
           />
           <TouchableOpacity
             onPress={() => onPlanSelected(null)}
-            className="mx-auto mt-4"
+            className="mx-auto mt-4 items-center"
           >
-            <Icon name="binoculars" />
+            <Icon name="binoculars" size={32} />
+            <Text bold className="white font-black mt-2 uppercase">
+              Explorar
+            </Text>
           </TouchableOpacity>
         </Modal>
         <MapWithMarkers

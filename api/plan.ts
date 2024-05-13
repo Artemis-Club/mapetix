@@ -20,6 +20,15 @@ const planApi = createApi({
         events: response[0].events.map((event) => event[0]),
       }),
     }),
+    generatePlan: builder.mutation({
+      query: ({ date }) => ({
+        url:
+          'plan?userLocation=0,0&maxDistance=3&TargetDate=' +
+          date +
+          '&maxPrice=10000000',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -28,5 +37,6 @@ export const {
   useGetPlanDetailsQuery,
   useLazyGetMyPlansQuery,
   useLazyGetPlanDetailsQuery,
+  useGeneratePlanMutation,
 } = planApi;
 export default planApi;
