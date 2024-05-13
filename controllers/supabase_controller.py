@@ -4,6 +4,7 @@ from supabase import create_client
 from dotenv import load_dotenv
 import json
 import pandas as pd
+from datetime import datetime
 
 class SupabaseController:
 
@@ -73,6 +74,12 @@ class SupabaseController:
         events = supabase.table('event').select('*').execute()
         return events
     
+    def get_today_events(self):
+        supabase = self.get_supabase_client()
+        today = datetime.today().strftime('%Y-%m-%d')
+        events = supabase.table('event').select('*').eq('start_date', today).order('id', desc=False).execute()
+        return events
+
     def get_users(self):
         supabase = self.get_supabase_client()
         profiles = supabase.table('user').select('*').order('id', desc=False).execute()
