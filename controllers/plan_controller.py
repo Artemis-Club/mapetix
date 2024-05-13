@@ -76,6 +76,7 @@ class PlanController:
         start_direction = treseventos[0]['direccion_event'] if treseventos else None
         finish_direction = treseventos[-1]['direccion_event'] if treseventos else None
         plan = {
+            'description' : self.generar_titulo_plan(),
             'created_at': created_at,
             'start_date': target_date,
             'finish_date': target_date,
@@ -294,6 +295,29 @@ class PlanController:
             lista.append(id)
         return lista
 
-    
+    def generar_titulo_plan(self):
+        titulos = [
+            "¡Descubriendo nuevos caminos! 🌟🛤️",
+            "Explorando el mundo sin límites 🌍🔍",
+            "¡Aventura en el horizonte! 🌅🌌",
+            "Rumbo hacia lo desconocido 🌠🚀",
+            "¡Emoción en cada paso! 🚶‍♂️🎉",
+            "Descubriendo la magia de la vida 🌟✨",
+            "¡Viaje hacia lo inesperado! 🌟🧳",
+            "Aventura en el corazón de la vida 🌍❤️",
+            "Explorando nuevas posibilidades 🌟🛣️",
+            "¡Descubre tu próxima gran historia! 📖🌟",
+            "Rumbo hacia el futuro brillante 🚀🌟",
+            "¡Explora, sueña, descubre! 🌟🌈",
+            "Descubriendo la belleza del mundo 🌺🌟",
+            "¡Adelante hacia nuevas aventuras! 🌟🚶‍♂️",
+            "Descubre la emoción en lo cotidiano 🌟🏙️",
+            "¡Abre las puertas de lo desconocido! 🚪🌟",
+            "Aventura en el camino menos transitado 🌟🛤️",
+            "Descubriendo la maravilla de cada momento 🌟😊",
+            "¡Explora el misterio de la vida! 🌟🔍",
+            "Aventura en cada esquina 🌟🚶‍♂️"
+        ]
+        return random.choice(titulos)
     
         
