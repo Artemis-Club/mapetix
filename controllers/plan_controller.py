@@ -221,6 +221,18 @@ class PlanController:
                         #break  # Salir del bucle interno una vez que se encuentra el evento
         return filtered_events
     
+    def filter_events_by_date(self,target_date,):
+        events = self.supabase_controller.get_events()
+        events = self.supabase_controller.processresponseNoDF(events)
+        filtered_events = []
+        for event in events:
+            start_date = event['start_date']
+            finish_date = event['finish_date']
+            #print(f"Checking event {event_id}:")
+            if start_date <= target_date <= finish_date:
+                filtered_events.append(event)
+        return filtered_events
+    
 
     def filter_events_by_distance(self,events, user_location, max_distance_km):
         filtered_events = []

@@ -33,14 +33,30 @@ def events_rated_by_user(userid):
 
 def get_events():
     supabase = supabase_controller.get_supabase_client()
-    events = supabase.table('event').select('*').execute()
+    events = supabase.table('event').select('*').order('id',desc=True).execute()
     return events
 
 events = get_events()
 events = supabase_controller.processresponseNoDF(events)
-random.shuffle(events)
-lista = []
-for event in events:
-    id = event['id']
+lista=[]
+for e in events:
+    id = e['id']
+    lista.append(id)
+print(lista)
+def filter_events_by_date(events, target_date,):
+        filtered_events = []
+        for event in events:
+            start_date = event['start_date']
+            finish_date = event['finish_date']
+            #print(f"Checking event {event_id}:")
+            if start_date <= target_date <= finish_date:
+                filtered_events.append(event)
+        return filtered_events
+
+
+ev = filter_events_by_date(events, '2024-05-31')
+lista=[]
+for e in ev:
+    id = e['id']
     lista.append(id)
 print(lista)

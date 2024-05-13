@@ -48,8 +48,8 @@ class PlanView:
         jwt_token = request.headers.get('Authorization')
         userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
         if userjwt_id:
-            allevents = supabase_controller.get_today_events()
-            allevents = supabase_controller.processresponseNoDF(allevents)
+            target_date = request.args.get('TargetDate')
+            allevents = plan_controller.filter_events_by_date(target_date)
             return jsonify(allevents)
         else:
             # Si el ID de usuario no existe, devolver un mensaje de error
