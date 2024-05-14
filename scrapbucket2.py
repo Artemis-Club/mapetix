@@ -192,10 +192,6 @@ class Scrap:
                                 siguiente_elemento = siguiente_elemento.find_next_sibling()
                     else:
                         horarios_texto = None
-                    # Ahora procesa el texto para extraer los horarios por día
-                    #print(horarios_texto)
-
-
 
                     #descripcion
                     etiqueta_div = soup_evento.find('div', class_='text-long')
@@ -249,18 +245,6 @@ class Scrap:
                         precio = None
 
 
-                    '''
-                    print('El titulo del evento es : ' + titulo)
-                    # Imprime las fechas del evento
-                    print("Fecha de inicio:", fecha_inicio)
-                    print("Fecha de fin:", fecha_fin)
-
-                    print("La descripcion del evento es : " + descripcion_evento)
-
-                    print("La categoría es : " + nombre_categoria)
-                    
-                    print("La dirección es : " + direccion)
-                    '''
                     coordenadas = self.obtener_coordenadas(direccion)
                     if coordenadas:
                         evento['coord_x'] = coordenadas[0]
@@ -269,17 +253,7 @@ class Scrap:
                         print(f"No se pudieron obtener las coordenadas para la dirección: {direccion}")
                         evento['coord_x'] = None
                         evento['coord_y'] = None
-                    '''
-                    if coordenadas:
-                        print("Las coordenadas de la dirección {} son: Latitud {}, Longitud {}".format(direccion, coordenadas[0], coordenadas[1]))
-                    else:
-                        print("No se pudieron obtener las coordenadas para la dirección:", direccion)
 
-                    print("El CP es : " + codigo_postal)
-
-                    print("El precio es : " + str(precio))
-                    print()
-                    '''
                     evento['event_name'] = titulo
                     evento['start_date'] = fecha_inicio_formateada
                     evento['finish_date'] = fecha_fin_formateada
@@ -295,14 +269,6 @@ class Scrap:
                     # Agregar el evento a la lista de eventos
                     eventos.append(evento)
                     print('Evento con título: ' + evento['event_name'] + ' Añadido')
-
-                    
-
-                    # Persiste los atributos en la base de datos de Supabase
-                    # Aquí debes adaptar este paso para que se ajuste a tu esquema de base de datos en Supabase
-                    #supabase.table('<nombre_de_tabla>').insert({'titulo': titulo, 'fecha': fecha, 'descripcion': descripcion}).execute()
-                    
-                    #print(f'Evento persistido en Supabase: {titulo}')
                     
                 else:
                     print(f'Error al acceder a la página del evento. Código de estado: {response_evento.status_code}')    

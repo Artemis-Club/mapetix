@@ -80,7 +80,6 @@ class PlanView:
             # Obtener el token JWT de la solicitud (suponiendo que está en el encabezado Authorization)
             jwt_token = request.headers.get('Authorization')
             userjwt_id = supabase_controller.GetUserIdFromjwt(jwt_token)
-            #print(userjwt_id)
             if userjwt_id:
                 user_location = request.args.get('userLocation')
                 user_location = tuple(map(float, user_location.split(',')))
