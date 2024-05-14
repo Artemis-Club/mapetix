@@ -10,11 +10,12 @@ export interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ open = false, children, onClose }) => {
-  const [delayedOpen, setDelayedOpen] = useState(open);
+  // const [delayedOpen, setDelayedOpen] = useState(open);
 
-  useEffect(() => {
-    setTimeout(() => setDelayedOpen(open), open ? 0 : 300);
-  }, [open]);
+  const delayedOpen = open;
+  // useEffect(() => {
+  //   open ? setDelayedOpen(open) : setTimeout(() => setDelayedOpen(open), 300);
+  // }, [open]);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Button, Input, Text } from '@/components';
+import { Button, Illustration, Input, Text } from '@/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useAuth from '@/hooks/useAuth';
 import useForm from '@/hooks/useForm';
@@ -20,6 +20,7 @@ export default function Login() {
   return (
     <SafeAreaView className="flex-1 bg-neutral-800 pt-12 px-4 gap-y-2">
       <Text className="text-2xl">Acceder</Text>
+      <Illustration variant="auth" />
       <Input
         label="Correo"
         onChange={onChange('email')}
@@ -34,8 +35,10 @@ export default function Login() {
         textContentType="password"
         autoCapitalize="none"
       />
-      <Button onPress={onSubmit}>Acceder</Button>
       {error && <Text className="text-red-500">{JSON.stringify(error)}</Text>}
+      <Button onPress={onSubmit} className="mt-auto">
+        Acceder
+      </Button>
     </SafeAreaView>
   );
 }

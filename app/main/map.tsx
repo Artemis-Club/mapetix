@@ -1,5 +1,11 @@
 import { View } from 'react-native';
-import { MapWithMarkers, Modal, PlanCardSwiper, Text } from '@/components';
+import {
+  MapWithMarkers,
+  Modal,
+  PlanCardSwiper,
+  Spinner,
+  Text,
+} from '@/components';
 import { mapSettings } from '@/config/map';
 import { PlanSelector } from '@/components/plan';
 import { useEffect, useState } from 'react';
@@ -18,11 +24,17 @@ export default function Map() {
 
   const location = useLocation();
 
-  const [getPlanDetails, { data: plan = { events: [] }, isLoading }] =
-    useLazyGetPlanDetailsQuery();
+  const [
+    getPlanDetails,
+    { data: plan = { events: [] }, isLoading: isLoadingPlan },
+  ] = useLazyGetPlanDetailsQuery();
 
-  const [getAllEvents, { data: allEvents = [], error }] =
-    useLazyGetEventsQuery();
+  const [
+    getAllEvents,
+    { data: allEvents = [], error, isLoading: isLoadinEvents },
+  ] = useLazyGetEventsQuery();
+
+  const isLoading = isLoadingPlan || isLoadinEvents;
 
   let events = !!selectedPlan ? plan?.events : allEvents;
 
@@ -98,6 +110,7 @@ export default function Map() {
           ),
         }}
       />
+      <Spinner open={isLoading} />
       <View className="flex-1">
         <Modal
           open={isPlanSelectorOpened}

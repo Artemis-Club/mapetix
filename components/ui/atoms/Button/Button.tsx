@@ -19,9 +19,9 @@ const Button: React.FC<ButtonProps> = ({
   style,
 }) => {
   const buttonStyles =
-    stylish === 'fill' ? 'bg-orange-500' : 'border border-orange-500';
+    stylish === 'fill' ? 'bg-amber-500' : 'border border-amber-500';
   const textStyles =
-    stylish === 'fill' ? 'text-white font-black' : 'text-orange-500';
+    stylish === 'fill' ? 'text-white font-black' : 'text-amber-500';
   return (
     <TouchableOpacity
       className={clsx(

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Alert, Platform } from 'react-native';
-import { Text } from '@/components';
+import { Illustration, Text } from '@/components';
 import { Button } from '@/components';
 import dayjs from 'dayjs';
 import DateTimePicker, {
@@ -72,6 +72,7 @@ const GeneratePlan = () => {
 
   return (
     <View className="flex-1 justify-center items-center bg-neutral-800 px-4">
+      <Illustration variant="explore" />
       <Text bold style={{ color: 'white', marginBottom: 10 }}>
         ¿Para qué dia?
       </Text>
