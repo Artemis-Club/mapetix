@@ -1,3 +1,4 @@
 .env
 users.csv
 __pycache__/
+pruebas/
