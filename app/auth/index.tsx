@@ -31,7 +31,7 @@ export default function Auth() {
         <BoxComponent className="mb-3">
           ¡Muchas gracias por confiar en Mapetix!{'\n'}Hacemos todo lo posible
           por recomendar los mejores planazos para disfrutar de nuestro tiempo
-          libre!
+          libre
         </BoxComponent>
         <Button onPress={() => router.push('/auth/login')} block={true}>
           Acceder

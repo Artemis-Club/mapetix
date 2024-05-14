@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { default as useAuth } from '@/hooks/useAuth';
 import useForm from '@/hooks/useForm';
 import { AuthPayload } from '@/types';
+import { KeyboardAvoidingView } from 'react-native';
+import { View } from 'react-native';
 
 export default function Signup() {
   const { signup, error } = useAuth();
@@ -21,31 +23,42 @@ export default function Signup() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-neutral-800 pt-12 px-4 gap-y-2">
-      <Text className="text-2xl text-white">Registrarse</Text>
-      <Input
-        label="Correo"
-        onChange={onChange('email')}
-        keyboardType="email-address"
-        textContentType="emailAddress"
-        autoCapitalize="none"
-      />
-      <Input
-        label="Contraseña"
-        onChange={onChange('password')}
-        secureTextEntry={true}
-        textContentType="password"
-        autoCapitalize="none"
-      />
-      <Input
-        label="Confirmar constraseña"
-        onChange={onChange('confirmPassword')}
-        secureTextEntry={true}
-        textContentType="password"
-        autoCapitalize="none"
-      />
-      <Button onPress={onSubmit}>Registrarse</Button>
-      {error && <Text className="text-red-500">{JSON.stringify(error)}</Text>}
-    </SafeAreaView>
+    <KeyboardAvoidingView
+      className="flex-1 justify-between bg-neutral-800 pt-28 px-4 gap-y-2"
+      keyboardVerticalOffset={100}
+      behavior="height"
+    >
+      <SafeAreaView className=" flex flex-1 justify-between">
+        <View className="flex flex-col justify-start">
+          <Input
+            label="Correo"
+            onChange={onChange('email')}
+            keyboardType="email-address"
+            textContentType="emailAddress"
+            autoCapitalize="none"
+          />
+          <Input
+            label="Contraseña"
+            onChange={onChange('password')}
+            secureTextEntry={true}
+            textContentType="password"
+            autoCapitalize="none"
+          />
+          <Input
+            label="Confirmar constraseña"
+            onChange={onChange('confirmPassword')}
+            secureTextEntry={true}
+            textContentType="password"
+            autoCapitalize="none"
+          />
+          {error && (
+            <Text className="text-red-500">{JSON.stringify(error)}</Text>
+          )}
+        </View>
+        <Button onPress={onSubmit} className="mb-8">
+          Registrarse
+        </Button>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
