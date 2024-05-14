@@ -3843,6 +3843,13 @@ expo-router@~3.5.11:
     react-native-helmet-async "2.0.4"
     schema-utils "^4.0.1"
 
+expo-sensors@~13.0.6:
+  version "13.0.6"
+  resolved "https://registry.yarnpkg.com/expo-sensors/-/expo-sensors-13.0.6.tgz#9751b9cde90abf7b28693cbba8461674d3875760"
+  integrity sha512-TqEx9up7AM7Rw2Aj9NXE0zrYH0RIfnrD3LvjAswwTYJjiaovr4UnejqGejnxNZ5vJG5AnZUL4U5tOY5uxDmVVA==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-splash-screen@0.27.4, expo-splash-screen@~0.27.4:
   version "0.27.4"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.27.4.tgz#d7a86a2a1a87824ed47388aa8836e91b61268c62"
