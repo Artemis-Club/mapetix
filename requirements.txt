@@ -1,0 +1,11 @@
+python-dotenv
+supabase
+pandas
+requests
+beautifulsoup4
+geopy
+unidecode
+Flask
+scikit-learn
+pyjwt
+gunicorn
