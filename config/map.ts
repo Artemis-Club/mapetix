@@ -1,6 +1,8 @@
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, MapViewProps } from 'react-native-maps';
 
-export const mapSettings = {
+interface MapSettings extends MapViewProps {}
+
+export const mapSettings: MapSettings = {
   initialRegion: {
     latitude: 39.46975,
     longitude: -0.37739,
@@ -8,8 +10,9 @@ export const mapSettings = {
     longitudeDelta: 0.0421,
   },
   // provider: PROVIDER_GOOGLE, //TEMP
-  showUserLocation: true,
+  showsUserLocation: true,
   showsCompass: false,
+  showsMyLocationButton: false,
   customMapStyle: [
     {
       elementType: 'geometry',
