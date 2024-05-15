@@ -45,7 +45,13 @@ const MapWithMarkers: React.FC<MapWithMarkersProps> = ({
 
   return (
     <View className="justify-center flex-1 ">
-      <MapView className="flex-1" {...props} mapPadding={padding} ref={mapRef}>
+      <MapView
+        className="flex-1"
+        {...props}
+        mapPadding={padding}
+        ref={mapRef}
+        showsUserLocation={true}
+      >
         {markers.map((marker, index) => (
           <MapMarker
             key={index}

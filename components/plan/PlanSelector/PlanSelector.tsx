@@ -1,5 +1,6 @@
 import React from 'react';
 import Text from '../../ui/atoms/Text/Text';
+import Spinner from '../../ui/atoms/Spinner/Spinner';
 
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import clsx from 'clsx';
@@ -24,6 +25,7 @@ const PlanSelector: React.FC<PlanSelectorProps> = ({
       onPress={() => onPlanSelected && onPlanSelected(plan_id)}
       key={plan_id}
     >
+      <Spinner open={isLoading} />
       <View
         className={clsx(
           'border-b border-neutral-600 py-2 px-4',
@@ -31,7 +33,9 @@ const PlanSelector: React.FC<PlanSelectorProps> = ({
         )}
       >
         <View className="flex-col">
-          <Text className="text-base">{description}</Text>
+          <Text className="text-base" numberOfLines={1}>
+            {description}
+          </Text>
           <Text className="text-neutral-500 text-xs">{start_date}</Text>
         </View>
         <View className="flex-col justify-center">

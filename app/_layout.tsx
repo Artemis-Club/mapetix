@@ -22,8 +22,14 @@ export default function RootLayout() {
         >
           <Stack.Screen name="main" options={{ headerShown: false }} />
           <Stack.Screen name="auth/index" options={{ headerShown: false }} />
-          <Stack.Screen name="auth/login" options={{ headerShown: true }} />
-          <Stack.Screen name="auth/signup" options={{ headerShown: true }} />
+          <Stack.Screen
+            name="auth/login"
+            options={{ headerShown: true, title: 'Acceder' }}
+          />
+          <Stack.Screen
+            name="auth/signup"
+            options={{ headerShown: true, title: 'Registrarse' }}
+          />
           <Stack.Screen
             name="plan/[planId]"
             options={{
@@ -34,7 +40,7 @@ export default function RootLayout() {
           <Stack.Screen
             name="event/[eventId]"
             options={{
-              headerShown: true,
+              headerShown: false,
               headerTransparent: false,
               presentation: 'modal',
             }}

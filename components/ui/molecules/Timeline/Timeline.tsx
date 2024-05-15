@@ -3,6 +3,7 @@ import TimelineFlatList from 'react-native-timeline-flatlist';
 
 interface TimelineProps {
   events: [];
+  onEventPress: (event: any) => void;
 }
 
 const Timeline: React.FC<TimelineProps> = ({ events, ...props }) => {
@@ -23,6 +24,7 @@ const Timeline: React.FC<TimelineProps> = ({ events, ...props }) => {
       timeContainerStyle={{ minWidth: 52, marginTop: 0 }}
       listViewContainerStyle={{ padding: 16 }}
       lineWidth={4}
+      {...props}
     />
   );
 };

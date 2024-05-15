@@ -6,6 +6,7 @@ interface ButtonProps {
   onPress?: () => void;
   children: React.ReactNode;
   stylish?: 'fill' | 'outline' | 'nav';
+  block?: boolean;
   style?: any;
   className?: string;
 }
@@ -14,18 +15,29 @@ const Button: React.FC<ButtonProps> = ({
   onPress,
   children,
   stylish = 'fill',
+  block = true,
   style,
 }) => {
   const buttonStyles =
-    stylish === 'fill' ? 'bg-purple-500' : 'border border-purple-600';
-  const textStyles = stylish === 'fill' ? 'text-white' : 'text-orange-600';
+    stylish === 'fill' ? 'bg-amber-500' : 'border border-amber-500';
+  const textStyles =
+    stylish === 'fill' ? 'text-white font-black' : 'text-amber-500';
   return (
     <TouchableOpacity
-      className={clsx(buttonStyles, 'self-center rounded-full p-2 px-4')}
+      className={clsx(
+        buttonStyles,
+        block && 'self-stretch',
+        'rounded-full py-2 px-6'
+      )}
       onPress={onPress}
       style={style}
     >
-      <Text className={textStyles}>{children}</Text>
+      <Text
+        bold={stylish === 'fill'}
+        className={clsx(textStyles, 'text-base text-center')}
+      >
+        {children}
+      </Text>
     </TouchableOpacity>
   );
 };

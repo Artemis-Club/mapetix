@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "proyect-7",
-    "slug": "proyect-7",
+    "name": "Mapetix",
+    "slug": "mapetix",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "maptx",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -20,7 +20,13 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCNcxwp_cs0M5FO0nW9xgPzASWkOEFViKw"
+        }
+      },
+      "package": "com.mapetix.mapetixapp"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +37,15 @@
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2048d28e-6661-4d49-a114-e48fe5c4fe67"
+      }
+    },
+    "owner": "mapetix"
   }
 }

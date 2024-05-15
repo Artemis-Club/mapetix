@@ -1,18 +1,23 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { authBaseQuery } from '@/utils/http';
+import { authApiQuery } from '@/utils/http';
 
-const planApi = createApi({
-  reducerPath: 'planApi',
-  baseQuery: authBaseQuery,
+const eventApi = createApi({
+  reducerPath: 'eventApi',
+  baseQuery: authApiQuery,
   endpoints: (builder) => ({
     getEvents: builder.query({
-      query: () => 'rest/v1/event',
+      query: () => 'allevents',
     }),
     getEventDetail: builder.query({
-      query: (id) => `rest/v1/event?plan_id=eq.${id}`,
+      query: (id) => `event/${id}`,
+      transformResponse: (response) => response[0],
     }),
   }),
 });
 
-export const { useGetEventsQuery, useGetEventDetailQuery } = planApi;
-export default planApi;
+export const {
+  useGetEventsQuery,
+  useGetEventDetailQuery,
+  useLazyGetEventsQuery,
+} = eventApi;
+export default eventApi;
