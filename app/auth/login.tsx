@@ -1,10 +1,10 @@
-import { Text, View } from 'react-native';
-import { Button, Input } from '@/components';
+import { View } from 'react-native';
+import { Button, Illustration, Input, Text } from '@/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useAuth from '@/hooks/useAuth';
 import useForm from '@/hooks/useForm';
 import { AuthPayload } from '@/types';
-
+import { KeyboardAvoidingView } from 'react-native';
 export default function Login() {
   const { login, error } = useAuth();
 
@@ -18,24 +18,37 @@ export default function Login() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-neutral-800 pt-12 px-4 gap-y-2">
-      <Text className="text-2xl text-white">Acceder</Text>
-      <Input
-        label="Correo"
-        onChange={onChange('email')}
-        keyboardType="email-address"
-        textContentType="emailAddress"
-        autoCapitalize="none"
-      />
-      <Input
-        label="Contraseña"
-        onChange={onChange('password')}
-        secureTextEntry={true}
-        textContentType="password"
-        autoCapitalize="none"
-      />
-      <Button onPress={onSubmit}>Acceder</Button>
-      {error && <Text className="text-red-500">{JSON.stringify(error)}</Text>}
-    </SafeAreaView>
+    <KeyboardAvoidingView
+      className="flex-1 justify-between bg-neutral-800 pt-20 px-4 gap-y-2"
+      keyboardVerticalOffset={100}
+      behavior="height"
+    >
+      <SafeAreaView className="flex flex-1 justify-between">
+        <View className="flex flex-col justify-start">
+          <Illustration variant="auth" />
+          <Input
+            label="Correo"
+            onChange={onChange('email')}
+            keyboardType="email-address"
+            textContentType="emailAddress"
+            autoCapitalize="none"
+          />
+          <Input
+            label="Contraseña"
+            onChange={onChange('password')}
+            secureTextEntry={true}
+            textContentType="password"
+            autoCapitalize="none"
+          />
+          {error && (
+            <Text className="text-red-500">{JSON.stringify(error)}</Text>
+          )}
+        </View>
+
+        <Button onPress={onSubmit} className="mb-8">
+          Acceder
+        </Button>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }

@@ -5,3 +5,6 @@ export * from './MapMarker';
 export * from './Input';
 export * from './Modal';
 export * from './Icon';
+export * from './Rating';
+export * from './BoxComponent';
+export * from './Spinner';

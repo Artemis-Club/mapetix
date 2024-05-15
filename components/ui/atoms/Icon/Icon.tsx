@@ -12,14 +12,15 @@ export type MaterialIconType = ExtractIconType<typeof MaterialCommunityIcons>;
 
 export interface IconProps {
   name: MaterialIconType;
+  size?: number;
   style?: object[];
   className?: string;
   onPress?: VoidFunction;
 }
 
-const Icon: React.FC<IconProps> = ({ style, name, onPress }) => {
+const Icon: React.FC<IconProps> = ({ style, name, onPress, size }) => {
   const defaultStyles = {
-    fontSize: 24,
+    fontSize: size || 24,
     color: 'white',
   };
   const parsedStyle = {

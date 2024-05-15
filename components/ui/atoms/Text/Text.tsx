@@ -1,7 +1,8 @@
+import clsx from 'clsx';
 import React from 'react';
-import { Text as RNText } from 'react-native';
+import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 
-interface TextProps {
+interface TextProps extends RNTextProps {
   children: React.ReactNode;
   fit?: boolean;
   bold?: boolean;
@@ -14,11 +15,11 @@ const Text: React.FC<TextProps> = ({
   fit,
   bold,
   style,
-  className,
+  ...props
 }) => {
   const textStyle = fit ? 'font-thin' : bold ? 'font-bold' : 'font-regular';
   return (
-    <RNText className={textStyle} style={style}>
+    <RNText className={clsx(textStyle, 'text-white')} style={style} {...props}>
       {children}
     </RNText>
   );

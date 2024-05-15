@@ -10,11 +10,12 @@ export interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ open = false, children, onClose }) => {
-  const [delayedOpen, setDelayedOpen] = useState(open);
+  // const [delayedOpen, setDelayedOpen] = useState(open);
 
-  useEffect(() => {
-    setTimeout(() => setDelayedOpen(open), open ? 0 : 300);
-  }, [open]);
+  const delayedOpen = open;
+  // useEffect(() => {
+  //   open ? setDelayedOpen(open) : setTimeout(() => setDelayedOpen(open), 300);
+  // }, [open]);
 
   return (
     <>
@@ -30,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({ open = false, children, onClose }) => {
                 className="absolute -z-10 bg-black w-full h-full opacity-40"
                 onPress={onClose}
               />
-              <View className="absolute z-10 w-full p-8">{children}</View>
+              <View className="z-10 w-full my-auto p-8">{children}</View>
             </Animated.View>
           )}
         </RNModal>
